@@ -1,0 +1,20 @@
+[
+  {
+    "id": "notif-1",
+    "userId": "user-1",
+    "channel": "whatsapp",
+    "title": "Booking Confirmed",
+    "message": "Your booking for Elderly Companionship with Vishnu Prasad is confirmed for Aug 18, 9:00 AM.",
+    "createdAt": "2026-08-08T10:01:00Z",
+    "read": true
+  },
+  {
+    "id": "notif-2",
+    "userId": "user-1",
+    "channel": "whatsapp",
+    "title": "Payment Received",
+    "message": "We received your payment of ₹1200 for booking #booking-1. Invoice attached.",
+    "createdAt": "2026-08-08T10:02:00Z",
+    "read": true
+  }
+]

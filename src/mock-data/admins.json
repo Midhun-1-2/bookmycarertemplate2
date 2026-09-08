@@ -1,0 +1,16 @@
+[
+  {
+    "id": "admin-1",
+    "name": "Kiran Thomas",
+    "phone": "9600000001",
+    "role": "admin",
+    "status": "active"
+  },
+  {
+    "id": "superadmin-1",
+    "name": "Meera Joseph",
+    "phone": "9500000001",
+    "role": "super-admin",
+    "status": "active"
+  }
+]

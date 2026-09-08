@@ -1,0 +1,170 @@
+[
+  {
+    "id": "page-1",
+    "categoryId": "cat-elder-disability",
+    "serviceId": "svc-elder-companion-care",
+    "slug": "elder-companion-care",
+    "title": "Elder Companion Care",
+    "shortDescription": "Warm, reliable companionship for seniors living independently.",
+    "description": "Our trained companions spend quality time with your loved ones — conversation, hobbies, light activity, and reassurance — so they never feel alone at home.",
+    "features": [
+      "Flexible hourly or daily visits",
+      "Trained & background-verified companions",
+      "Real-time family updates"
+    ],
+    "requirements": [
+      "Client must be present at the registered address",
+      "Emergency contact required at booking"
+    ],
+    "pricing": [
+      {
+        "label": "Hourly",
+        "price": 350,
+        "unit": "/ hr"
+      },
+      {
+        "label": "Daily (8 hrs)",
+        "price": 2400,
+        "unit": "/ day"
+      }
+    ],
+    "status": "published",
+    "updatedAt": "2026-08-01T09:00:00Z"
+  },
+  {
+    "id": "page-2",
+    "categoryId": "cat-personal-daily-living",
+    "serviceId": "svc-personal-hygiene-grooming",
+    "slug": "personal-hygiene-grooming",
+    "title": "Personal Hygiene & Grooming",
+    "shortDescription": "Dignified, respectful daily hygiene support.",
+    "description": "Our caregivers assist with bathing, dressing, and grooming with patience and respect for privacy, helping clients maintain confidence and comfort every day.",
+    "features": [
+      "Gender-preference matching available",
+      "Skin & mobility-safe techniques",
+      "Consistent caregiver assignment"
+    ],
+    "requirements": [
+      "Bathroom safety equipment recommended for mobility-limited clients"
+    ],
+    "pricing": [
+      {
+        "label": "Hourly",
+        "price": 300,
+        "unit": "/ hr"
+      }
+    ],
+    "status": "published",
+    "updatedAt": "2026-08-01T09:00:00Z"
+  },
+  {
+    "id": "page-3",
+    "categoryId": "cat-nursing-clinical",
+    "serviceId": "svc-post-operative-care",
+    "slug": "post-operative-care",
+    "title": "Post-Operative Care",
+    "shortDescription": "Qualified nursing support for a safe recovery at home.",
+    "description": "Registered nurses provide wound checks, medication administration, and vitals monitoring following surgery, coordinated with your treating physician.",
+    "features": [
+      "Registered & licensed nurses",
+      "Coordinated with physician instructions",
+      "24/7 emergency escalation"
+    ],
+    "requirements": [
+      "Discharge summary from hospital",
+      "Physician contact for coordination"
+    ],
+    "pricing": [
+      {
+        "label": "Per visit (2 hrs)",
+        "price": 600,
+        "unit": "/ visit"
+      },
+      {
+        "label": "Daily (8 hrs)",
+        "price": 3600,
+        "unit": "/ day"
+      }
+    ],
+    "status": "published",
+    "updatedAt": "2026-08-02T09:00:00Z"
+  },
+  {
+    "id": "page-4",
+    "categoryId": "cat-personal-daily-living",
+    "serviceId": "svc-domestic-assistance-cleaning",
+    "slug": "domestic-assistance-cleaning",
+    "title": "Domestic Assistance / Cleaning",
+    "shortDescription": "Reliable home cleaning support so you can focus on care.",
+    "description": "Thorough, consistent housekeeping — from daily tidying to deep cleans — delivered by vetted domestic staff.",
+    "features": [
+      "Vetted & background-checked staff",
+      "Flexible daily/weekly scheduling",
+      "Eco-friendly cleaning options"
+    ],
+    "requirements": [
+      "Cleaning supplies provided by client unless otherwise arranged"
+    ],
+    "pricing": [
+      {
+        "label": "Hourly",
+        "price": 250,
+        "unit": "/ hr"
+      }
+    ],
+    "status": "published",
+    "updatedAt": "2026-07-28T09:00:00Z"
+  },
+  {
+    "id": "page-5",
+    "categoryId": "cat-elder-disability",
+    "serviceId": "svc-mobility-transport-support",
+    "slug": "mobility-transport-support",
+    "title": "Mobility & Transport Support",
+    "shortDescription": "Safe, accompanied travel for appointments and outings.",
+    "description": "A trained companion accompanies clients to medical appointments, social visits, or errands, providing mobility support throughout the journey.",
+    "features": [
+      "Door-to-door accompaniment",
+      "Wheelchair-accessible coordination on request",
+      "Return-trip included"
+    ],
+    "requirements": [
+      "Destination & appointment time confirmed 24 hrs in advance"
+    ],
+    "pricing": [
+      {
+        "label": "Per trip",
+        "price": 300,
+        "unit": "/ trip"
+      }
+    ],
+    "status": "draft",
+    "updatedAt": "2026-08-05T09:00:00Z"
+  },
+  {
+    "id": "page-6",
+    "categoryId": "cat-elder-disability",
+    "serviceId": "svc-dementia-care",
+    "slug": "dementia-care",
+    "title": "Dementia Care",
+    "shortDescription": "Specialized, patient-centered support for memory care.",
+    "description": "Caregivers trained in dementia-specific techniques provide structured routines, safety supervision, and compassionate engagement.",
+    "features": [
+      "Dementia-care certified staff",
+      "Structured daily routines",
+      "Family caregiver guidance included"
+    ],
+    "requirements": [
+      "Care plan review with family before first visit"
+    ],
+    "pricing": [
+      {
+        "label": "Hourly",
+        "price": 450,
+        "unit": "/ hr"
+      }
+    ],
+    "status": "draft",
+    "updatedAt": "2026-08-06T09:00:00Z"
+  }
+]

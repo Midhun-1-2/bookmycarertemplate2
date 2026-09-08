@@ -1,0 +1,260 @@
+[
+  {
+    "id": "staff-1",
+    "name": "Anjali Nair",
+    "phone": "9800000001",
+    "city": "Kochi",
+    "area": "Kakkanad",
+    "categories": [
+      "cat-elder-disability",
+      "cat-personal-daily-living"
+    ],
+    "skills": [
+      "Dementia Care",
+      "Medication Management"
+    ],
+    "rating": 4.8,
+    "experienceYears": 6,
+    "hourlyRate": 380,
+    "serviceRadiusKm": 12,
+    "status": "active",
+    "available": true,
+    "createdBy": "admin-1"
+  },
+  {
+    "id": "staff-2",
+    "name": "Rahul Menon",
+    "phone": "9800000002",
+    "city": "Kochi",
+    "area": "Edappally",
+    "categories": [
+      "cat-nursing-clinical"
+    ],
+    "skills": [
+      "Wound Care",
+      "Post-Operative Nursing"
+    ],
+    "rating": 4.6,
+    "experienceYears": 4,
+    "hourlyRate": 450,
+    "serviceRadiusKm": 8,
+    "status": "active",
+    "available": true,
+    "createdBy": "admin-1"
+  },
+  {
+    "id": "staff-3",
+    "name": "Sneha Pillai",
+    "phone": "9800000003",
+    "city": "Kochi",
+    "area": "Kakkanad",
+    "categories": [
+      "cat-personal-daily-living"
+    ],
+    "skills": [
+      "Housekeeping",
+      "Meal Preparation"
+    ],
+    "rating": 4.7,
+    "experienceYears": 3,
+    "hourlyRate": 260,
+    "serviceRadiusKm": 15,
+    "status": "active",
+    "available": false,
+    "createdBy": "admin-1"
+  },
+  {
+    "id": "staff-4",
+    "name": "Vishnu Prasad",
+    "phone": "9800000004",
+    "city": "Kochi",
+    "area": "Vyttila",
+    "categories": [
+      "cat-personal-daily-living",
+      "cat-elder-disability"
+    ],
+    "skills": [
+      "Transport Assistance",
+      "Elderly Companionship"
+    ],
+    "rating": 4.9,
+    "experienceYears": 5,
+    "hourlyRate": 340,
+    "serviceRadiusKm": 20,
+    "status": "active",
+    "available": true,
+    "createdBy": "admin-1"
+  },
+  {
+    "id": "staff-5",
+    "name": "Divya Krishnan",
+    "phone": "9800000005",
+    "city": "Kochi",
+    "area": "Edappally",
+    "categories": [
+      "cat-personal-daily-living",
+      "cat-nursing-clinical"
+    ],
+    "skills": [
+      "Bathing & Grooming",
+      "Vitals Monitoring"
+    ],
+    "rating": 4.5,
+    "experienceYears": 7,
+    "hourlyRate": 400,
+    "serviceRadiusKm": 10,
+    "status": "active",
+    "available": false,
+    "createdBy": "admin-1"
+  },
+  {
+    "id": "staff-pending-1",
+    "name": "Meera Suresh",
+    "phone": "9812345678",
+    "city": "Kochi",
+    "area": "Panampilly",
+    "categories": [
+      "cat-mother-baby",
+      "cat-personal-daily-living"
+    ],
+    "skills": [
+      "Newborn Care",
+      "Postnatal Support"
+    ],
+    "rating": 0,
+    "experienceYears": 4,
+    "hourlyRate": 480,
+    "serviceRadiusKm": 12,
+    "status": "pending",
+    "available": true,
+    "createdBy": "self-registered",
+    "email": "meera.suresh@example.com",
+    "registeredAt": "2026-09-05T09:20:00.000Z",
+    "documents": [
+      {
+        "id": "doc-seed-m1",
+        "type": "Aadhaar Card",
+        "fileName": "meera-aadhaar.pdf"
+      },
+      {
+        "id": "doc-seed-m2",
+        "type": "PAN Card",
+        "fileName": "meera-pan.pdf"
+      },
+      {
+        "id": "doc-seed-m3",
+        "type": "Nursing Certificate",
+        "fileName": "meera-gnm-certificate.pdf"
+      },
+      {
+        "id": "doc-seed-m4",
+        "type": "Photo",
+        "fileName": "meera-photo.jpg"
+      }
+    ]
+  },
+  {
+    "id": "staff-pending-2",
+    "name": "Arjun Das",
+    "phone": "9845561203",
+    "city": "Kochi",
+    "area": "Edappally",
+    "categories": [
+      "cat-physio-rehab-speech"
+    ],
+    "skills": [
+      "Physiotherapy",
+      "Stroke Rehabilitation"
+    ],
+    "rating": 0,
+    "experienceYears": 7,
+    "hourlyRate": 620,
+    "serviceRadiusKm": 15,
+    "status": "pending",
+    "available": true,
+    "createdBy": "self-registered",
+    "email": "arjun.das@example.com",
+    "registeredAt": "2026-09-06T14:05:00.000Z",
+    "documents": [
+      {
+        "id": "doc-seed-a1",
+        "type": "Aadhaar Card",
+        "fileName": "arjun-aadhaar.pdf"
+      },
+      {
+        "id": "doc-seed-a2",
+        "type": "PAN Card",
+        "fileName": "arjun-pan.pdf"
+      },
+      {
+        "id": "doc-seed-a3",
+        "type": "BPT Degree Certificate",
+        "fileName": "arjun-bpt-degree.pdf"
+      },
+      {
+        "id": "doc-seed-a4",
+        "type": "Photo",
+        "fileName": "arjun-photo.jpg"
+      }
+    ]
+  },
+  {
+    "id": "staff-pending-3",
+    "name": "Fathima Rasheed",
+    "phone": "9895570411",
+    "city": "Kochi",
+    "area": "Kakkanad",
+    "categories": [
+      "cat-mental-health"
+    ],
+    "skills": [
+      "Counselling",
+      "Grief & Loss Support"
+    ],
+    "rating": 0,
+    "experienceYears": 5,
+    "hourlyRate": 750,
+    "serviceRadiusKm": 20,
+    "status": "pending",
+    "available": true,
+    "createdBy": "self-registered",
+    "email": "fathima.rasheed@example.com",
+    "registeredAt": "2026-09-06T18:40:00.000Z",
+    "documents": [
+      {
+        "id": "doc-seed-f1",
+        "type": "Aadhaar Card",
+        "fileName": "fathima-aadhaar.pdf"
+      },
+      {
+        "id": "doc-seed-f2",
+        "type": "MSc Psychology Certificate",
+        "fileName": "fathima-msc-psychology.pdf"
+      }
+    ]
+  },
+  {
+    "id": "staff-pending-4",
+    "name": "Rohit Varma",
+    "phone": "9847712260",
+    "city": "Kochi",
+    "area": "Vyttila",
+    "categories": [
+      "cat-pet-care"
+    ],
+    "skills": [
+      "Dog Walking",
+      "Pet Sitting"
+    ],
+    "rating": 0,
+    "experienceYears": 2,
+    "hourlyRate": 280,
+    "serviceRadiusKm": 10,
+    "status": "pending",
+    "available": true,
+    "createdBy": "self-registered",
+    "email": "rohit.varma@example.com",
+    "registeredAt": "2026-09-07T07:15:00.000Z",
+    "documents": []
+  }
+]

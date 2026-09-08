@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   BOOK MY CARER — "EDITORIAL IVORY"
+   -----------------------------------------------------------------------------
+   A light, gallery-style theme built from exactly two client colours:
+     BLACK  #231F20   RED  #DD222B
+
+   The site is light. Black is not a background — it is a *material*: solid ink
+   panels that punctuate the ivory canvas (the closing call to action, the
+   footer, image scrims). Red is the only chromatic colour in the interface and
+   is reserved for action and emphasis, never for large fields.
+
+   Every neutral below is a warm derivative of #231F20 rather than a blue-grey,
+   so the whole page reads as ink on paper. `slate-900` IS the client black.
+============================================================================= */
+
+@theme {
+  /* --- EMBER: the client red ---------------------------------------------
+     600 is the logo red exactly. 700-800 are the darker reds used for TEXT on
+     light grounds, where the pure logo red would be too bright to read at
+     body size. 50-200 are the blush grounds used for chips and soft fills. */
+  --color-brand-50: #fdf5f5;
+  --color-brand-100: #fbe5e6;
+  --color-brand-200: #f7cacc;
+  --color-brand-300: #f0a2a6;
+  --color-brand-400: #e86d73;
+  --color-brand-500: #e13d45;
+  --color-brand-600: #dd222b;
+  --color-brand-700: #b81a22;
+  --color-brand-800: #8c171d;
+  --color-brand-900: #231f20;
+  --color-brand-950: #231f20;
+
+  /* --- SURFACES ----------------------------------------------------------
+     `void` is the page canvas: a warm ivory, not white, so the white cards on
+     top of it have something to sit against. */
+  --color-void: #fbf9f6;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f2ed;
+  --color-surface-3: #ebe6df;
+  --color-line: #e7e1d9;
+  --color-line-strong: #d3cabe;
+
+  /* --- INK: the client black as a material ------------------------------- */
+  --color-ink: #231f20;
+  --color-ink-2: #2f2a2b;
+  --color-ink-3: #3c3536;
+
+  /* --- NEUTRALS: warm greys resolving to the client black at 900 --------- */
+  --color-slate-50: #faf8f6;
+  --color-slate-100: #f2efea;
+  --color-slate-200: #e5dfd7;
+  --color-slate-300: #cec6bb;
+  --color-slate-400: #9b9391;
+  --color-slate-500: #71696a;
+  --color-slate-600: #574f50;
+  --color-slate-700: #3e3839;
+  --color-slate-800: #2d2829;
+  --color-slate-900: #231f20;
+  --color-slate-950: #120f10;
+
+  /* --- ACCENT: the one cool note, for "in progress" states and charts ---- */
+  --color-accent-50: #eef4fd;
+  --color-accent-100: #dbe8fb;
+  --color-accent-200: #bcd4f6;
+  --color-accent-300: #8fb6ee;
+  --color-accent-400: #5a8fe0;
+  --color-accent-500: #3a72c9;
+  --color-accent-600: #2c5aa6;
+  --color-accent-700: #23477f;
+
+  /* --- DANGER: deeper and heavier than the brand red, so a destructive
+         action never reads as an ordinary primary button ------------------ */
+  --color-rose-50: #fdf2f2;
+  --color-rose-100: #fae0e0;
+  --color-rose-200: #f3c2c2;
+  --color-rose-300: #e69696;
+  --color-rose-400: #d16467;
+  --color-rose-500: #bb3a3e;
+  --color-rose-600: #a5111b;
+  --color-rose-700: #860f16;
+  --color-rose-800: #6b0f14;
+  --color-rose-900: #551015;
+  --color-rose-950: #2e0709;
+
+  /* --- SUCCESS / WARNING -------------------------------------------------- */
+  --color-emerald-50: #edf8f2;
+  --color-emerald-100: #d4f0e2;
+  --color-emerald-200: #a8e0c6;
+  --color-emerald-300: #6cc79f;
+  --color-emerald-400: #3ba876;
+  --color-emerald-500: #2b8f61;
+  --color-emerald-600: #1f7450;
+  --color-emerald-700: #195c40;
+
+  --color-amber-50: #fdf6e7;
+  --color-amber-100: #fae9c4;
+  --color-amber-200: #f4d68d;
+  --color-amber-300: #ecbb4c;
+  --color-amber-400: #dda220;
+  --color-amber-500: #c08715;
+  --color-amber-600: #9c6c11;
+  --color-amber-700: #7c550f;
+  --color-amber-800: #5f4210;
+  --color-amber-900: #4a340f;
+
+  /* --- GOLD: star ratings only ------------------------------------------ */
+  --color-gold-400: #f0b429;
+  --color-gold-500: #d99b16;
+  --color-gold-600: #b87f0d;
+
+  /* --- TYPE ------------------------------------------------------------- */
+  --font-sans: 'Manrope', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- MOTION ----------------------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+
+  --animate-ember: ember 9s ease-in-out infinite;
+  --animate-drift: drift 22s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+
+  @keyframes ember {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50%      { opacity: 0.9; transform: scale(1.12); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    33%      { transform: translate3d(4%, -6%, 0) scale(1.08); }
+    66%      { transform: translate3d(-5%, 4%, 0) scale(0.95); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to   { background-position: 200% 0; }
+  }
+  @keyframes pulse-ring {
+    0%   { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(2.1); opacity: 0; }
+  }
+}
+
+/* =============================================================================
+   BASE
+============================================================================= */
+
+html {
+  /* `clip`, not `hidden`: `overflow-x: hidden` turns this into a scroll
+     container, which silently breaks every `position: sticky` header inside.
+     `clip` trims the decorative blur blobs without that side effect. */
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-void);
+  color: var(--color-slate-600);
+  overflow-x: clip;
+}
+
+/* Ambient warmth: two very faint blush washes so the ivory canvas has a
+   gradient to it rather than reading as flat off-white. Fixed, so every page
+   inherits the same light. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 10% -10%, rgba(221, 34, 43, 0.055), transparent 62%),
+    radial-gradient(50rem 38rem at 95% 2%, rgba(221, 34, 43, 0.035), transparent 60%);
+}
+
+/* Paper grain — kills banding in the washes and gives the ivory a printed
+   quality rather than a flat digital off-white. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* No overflow clipping here: `overflow-x: hidden` on this element would turn it
+   into a scroll container, and every `position: sticky` header inside it would
+   silently stop sticking. html and body already clip the x axis. */
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 0;
+}
+
+/* Fraunces is a variable optical-size serif; softening the terminals gives the
+   headings the warmth a care brand needs without losing the editorial edge. */
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 30, 'WONK' 1;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: var(--color-brand-600);
+  color: #fff;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-400);
+  background-clip: content-box;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =============================================================================
+   COMPONENT UTILITIES
+============================================================================= */
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* A hairline that fades out at both ends — used as section rules so the page
+   never gets chopped by a hard edge-to-edge line. */
+@utility rule-fade {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-line-strong), transparent);
+}
+
+/* The standard elevated surface: white paper on the ivory canvas. Depth comes
+   from a hairline plus a wide, very soft ink shadow — never a grey blur. */
+@utility paper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 1px 2px rgba(35, 31, 32, 0.04),
+    0 12px 28px -18px rgba(35, 31, 32, 0.22);
+}
+
+/* Alias of `paper`, so every surface in the app resolves to one treatment. */
+@utility glass {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 1px 2px rgba(35, 31, 32, 0.04),
+    0 12px 28px -18px rgba(35, 31, 32, 0.22);
+}
+
+/* A panel cut from the client black. This is how black enters a light site:
+   as a solid material for one deliberate band, never as a page background. */
+@utility ink-panel {
+  background-color: var(--color-ink);
+  color: #ffffff;
+}
+
+@utility ember-glow {
+  box-shadow:
+    0 8px 22px -10px rgba(221, 34, 43, 0.55),
+    0 0 0 1px rgba(221, 34, 43, 0.18);
+}
+
+/* Gradient text for the one accented word in each display heading. */
+@utility text-ember {
+  background: linear-gradient(100deg, #dd222b 0%, #8c171d 55%, #dd222b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Sweeping highlight for skeleton loading states. */
+@utility sheen {
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(35, 31, 32, 0.07) 45%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}

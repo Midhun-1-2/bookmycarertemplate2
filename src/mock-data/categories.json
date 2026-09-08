@@ -1,0 +1,499 @@
+[
+  {
+    "id": "cat-nursing-clinical",
+    "name": "Nursing & Clinical Services",
+    "slug": "nursing-clinical",
+    "icon": "Stethoscope",
+    "description": "Qualified nurses and clinical professionals for wound care, IV therapy, post-operative recovery, and monitoring at home.",
+    "services": [
+      {
+        "id": "svc-registered-nurse-rn",
+        "name": "Registered Nurse (RN)",
+        "priceFrom": 700
+      },
+      {
+        "id": "svc-enrolled-nurse-en",
+        "name": "Enrolled Nurse (EN)",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-wound-care-dressing",
+        "name": "Wound Care & Dressing",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-iv-therapy-cannulation",
+        "name": "IV Therapy & Cannulation",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-medication-management",
+        "name": "Medication Management",
+        "priceFrom": 450
+      },
+      {
+        "id": "svc-post-operative-care",
+        "name": "Post-Operative Care",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-vital-signs-monitoring",
+        "name": "Vital Signs Monitoring",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-pharmacy-services",
+        "name": "Pharmacy Services",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-medical-radiation-therapy",
+        "name": "Medical Radiation Therapy",
+        "priceFrom": 900
+      },
+      {
+        "id": "svc-radiography-imaging",
+        "name": "Radiography / Imaging",
+        "priceFrom": 850
+      },
+      {
+        "id": "svc-nuclear-medicine-technology",
+        "name": "Nuclear Medicine Technology",
+        "priceFrom": 950
+      },
+      {
+        "id": "svc-genetic-counselling",
+        "name": "Genetic Counselling",
+        "priceFrom": 800
+      }
+    ]
+  },
+  {
+    "id": "cat-physio-rehab-speech",
+    "name": "Physio, Rehab & Speech",
+    "slug": "physio-rehab-speech",
+    "icon": "Activity",
+    "description": "Therapists for recovery after surgery, stroke, or injury — physiotherapy, speech, and rehabilitation at home.",
+    "services": [
+      {
+        "id": "svc-physiotherapy",
+        "name": "Physiotherapy",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-occupational-therapy",
+        "name": "Occupational Therapy",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-speech-pathology",
+        "name": "Speech Pathology",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-audiology",
+        "name": "Audiology",
+        "priceFrom": 700
+      },
+      {
+        "id": "svc-exercise-physiology",
+        "name": "Exercise Physiology",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-podiatry",
+        "name": "Podiatry",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-nutrition-dietetics",
+        "name": "Nutrition & Dietetics",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-orthoptics",
+        "name": "Orthoptics",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-orthotics-prosthetics",
+        "name": "Orthotics & Prosthetics",
+        "priceFrom": 750
+      },
+      {
+        "id": "svc-diversional-therapy",
+        "name": "Diversional Therapy",
+        "priceFrom": 450
+      },
+      {
+        "id": "svc-post-surgery-rehabilitation",
+        "name": "Post-Surgery Rehabilitation",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-stroke-rehabilitation",
+        "name": "Stroke Rehabilitation",
+        "priceFrom": 700
+      }
+    ]
+  },
+  {
+    "id": "cat-elder-disability",
+    "name": "Elder & Disability Care",
+    "slug": "elder-disability-care",
+    "icon": "HeartHandshake",
+    "description": "Compassionate day, night, and live-in support for seniors and people living with disability.",
+    "services": [
+      {
+        "id": "svc-aged-elderly-care",
+        "name": "Aged / Elderly Care",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-disability-support-worker",
+        "name": "Disability Support Worker",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-support-coordinator",
+        "name": "Support Coordinator",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-behaviour-support-practitioner",
+        "name": "Behaviour Support Practitioner",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-dementia-care",
+        "name": "Dementia Care",
+        "priceFrom": 450
+      },
+      {
+        "id": "svc-elder-companion-care",
+        "name": "Elder Companion Care",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-attendant-care",
+        "name": "Attendant Care",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-mobility-transport-support",
+        "name": "Mobility & Transport Support",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-overnight-live-in-care",
+        "name": "Overnight / Live-In Care",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-palliative-end-of-life-care",
+        "name": "Palliative & End-of-Life Care",
+        "priceFrom": 600
+      }
+    ]
+  },
+  {
+    "id": "cat-personal-daily-living",
+    "name": "Personal & Daily Living Support",
+    "slug": "personal-daily-living",
+    "icon": "HandHeart",
+    "description": "Everyday help with hygiene, meals, housekeeping, errands, and staying independent at home.",
+    "services": [
+      {
+        "id": "svc-personal-hygiene-grooming",
+        "name": "Personal Hygiene & Grooming",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-domestic-assistance-cleaning",
+        "name": "Domestic Assistance / Cleaning",
+        "priceFrom": 250
+      },
+      {
+        "id": "svc-meal-preparation",
+        "name": "Meal Preparation",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-shopping-errands",
+        "name": "Shopping & Errands",
+        "priceFrom": 250
+      },
+      {
+        "id": "svc-social-community-access",
+        "name": "Social & Community Access",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-home-management-support",
+        "name": "Home Management Support",
+        "priceFrom": 280
+      },
+      {
+        "id": "svc-medication-reminders",
+        "name": "Medication Reminders",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-skill-building-independence",
+        "name": "Skill Building & Independence",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-social-work",
+        "name": "Social Work",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-welfare-work",
+        "name": "Welfare Work",
+        "priceFrom": 450
+      }
+    ]
+  },
+  {
+    "id": "cat-mother-baby",
+    "name": "Mother & Baby Care",
+    "slug": "mother-baby-care",
+    "icon": "Baby",
+    "description": "Newborn specialists, postnatal support, lactation help, and trained, background-checked sitters.",
+    "services": [
+      {
+        "id": "svc-newborn-baby-care-specialist",
+        "name": "Newborn / Baby Care Specialist",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-babysitter",
+        "name": "Babysitter",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-nanny-childcare-worker",
+        "name": "Nanny / Childcare Worker",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-postnatal-care-support",
+        "name": "Postnatal Care & Support",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-breastfeeding-support",
+        "name": "Breastfeeding Support",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-night-nurse-sleep-support",
+        "name": "Night Nurse / Sleep Support",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-maternity-midwifery-support",
+        "name": "Maternity / Midwifery Support",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-child-life-therapy",
+        "name": "Child Life Therapy",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-paediatric-speech-therapy",
+        "name": "Paediatric Speech Therapy",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-paediatric-occupational-therapy",
+        "name": "Paediatric Occupational Therapy",
+        "priceFrom": 650
+      },
+      {
+        "id": "svc-postnatal-exercise-recovery",
+        "name": "Postnatal Exercise & Recovery",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-child-development-support",
+        "name": "Child Development Support",
+        "priceFrom": 500
+      }
+    ]
+  },
+  {
+    "id": "cat-mental-health",
+    "name": "Mental Health & Counselling",
+    "slug": "mental-health-counselling",
+    "icon": "Brain",
+    "description": "Credentialed psychologists and counsellors for talk therapy and wellbeing support, online or in person.",
+    "services": [
+      {
+        "id": "svc-psychology",
+        "name": "Psychology",
+        "priceFrom": 900
+      },
+      {
+        "id": "svc-counselling",
+        "name": "Counselling",
+        "priceFrom": 700
+      },
+      {
+        "id": "svc-mental-health-crisis-support",
+        "name": "Mental Health Crisis Support",
+        "priceFrom": 850
+      },
+      {
+        "id": "svc-trauma-support",
+        "name": "Trauma Support",
+        "priceFrom": 800
+      },
+      {
+        "id": "svc-sexual-assault-support-worker",
+        "name": "Sexual Assault Support Worker",
+        "priceFrom": 800
+      },
+      {
+        "id": "svc-grief-loss-counselling",
+        "name": "Grief & Loss Counselling",
+        "priceFrom": 750
+      },
+      {
+        "id": "svc-anxiety-depression-support",
+        "name": "Anxiety & Depression Support",
+        "priceFrom": 750
+      },
+      {
+        "id": "svc-family-relationship-counselling",
+        "name": "Family & Relationship Counselling",
+        "priceFrom": 800
+      },
+      {
+        "id": "svc-elderly-mental-wellbeing",
+        "name": "Elderly Mental Wellbeing",
+        "priceFrom": 700
+      },
+      {
+        "id": "svc-art-therapy",
+        "name": "Art Therapy",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-music-therapy",
+        "name": "Music Therapy",
+        "priceFrom": 600
+      }
+    ]
+  },
+  {
+    "id": "cat-wellness-lifestyle",
+    "name": "Wellness & Lifestyle Services",
+    "slug": "wellness-lifestyle",
+    "icon": "Leaf",
+    "description": "Yoga, fitness, massage, and coaching to support recovery, mobility, and everyday wellbeing.",
+    "services": [
+      {
+        "id": "svc-yoga-mindfulness",
+        "name": "Yoga & Mindfulness",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-meditation-coaching",
+        "name": "Meditation Coaching",
+        "priceFrom": 450
+      },
+      {
+        "id": "svc-wellness-coaching",
+        "name": "Wellness Coaching",
+        "priceFrom": 550
+      },
+      {
+        "id": "svc-personal-fitness-training",
+        "name": "Personal Fitness Training",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-remedial-massage",
+        "name": "Remedial Massage",
+        "priceFrom": 700
+      },
+      {
+        "id": "svc-holistic-health-coaching",
+        "name": "Holistic Health Coaching",
+        "priceFrom": 600
+      },
+      {
+        "id": "svc-breathwork-stress-relief",
+        "name": "Breathwork & Stress Relief",
+        "priceFrom": 450
+      },
+      {
+        "id": "svc-lifestyle-social-engagement",
+        "name": "Lifestyle & Social Engagement",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-nutrition-coaching",
+        "name": "Nutrition Coaching",
+        "priceFrom": 500
+      }
+    ]
+  },
+  {
+    "id": "cat-pet-care",
+    "name": "Pet Care Services",
+    "slug": "pet-care",
+    "icon": "PawPrint",
+    "description": "Walking, sitting, grooming, and vet visits — including pet companionship for elderly owners.",
+    "services": [
+      {
+        "id": "svc-dog-walking",
+        "name": "Dog Walking",
+        "priceFrom": 200
+      },
+      {
+        "id": "svc-pet-sitting-in-home",
+        "name": "Pet Sitting (in-home)",
+        "priceFrom": 250
+      },
+      {
+        "id": "svc-pet-grooming",
+        "name": "Pet Grooming",
+        "priceFrom": 400
+      },
+      {
+        "id": "svc-overnight-pet-care",
+        "name": "Overnight Pet Care",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-cat-care-sitting",
+        "name": "Cat Care & Sitting",
+        "priceFrom": 250
+      },
+      {
+        "id": "svc-pet-medication-administration",
+        "name": "Pet Medication Administration",
+        "priceFrom": 300
+      },
+      {
+        "id": "svc-vet-transport-escort",
+        "name": "Vet Transport & Escort",
+        "priceFrom": 350
+      },
+      {
+        "id": "svc-dog-training-behaviour",
+        "name": "Dog Training & Behaviour",
+        "priceFrom": 500
+      },
+      {
+        "id": "svc-pet-companionship-elderly",
+        "name": "Pet Companionship (elderly)",
+        "priceFrom": 300
+      }
+    ]
+  }
+]

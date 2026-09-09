@@ -6,7 +6,7 @@ import { LANGUAGES } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { dropdown, EASE_OUT_EXPO } from '../../lib/motion'
 
-export default function LanguageSwitcher({ className = '', dark = false }) {
+export default function LanguageSwitcher({ className = '', dark = false, openUp = false, iconOnly = false }) {
   const { i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -27,19 +27,24 @@ export default function LanguageSwitcher({ className = '', dark = false }) {
     <div ref={ref} className={cn('relative', className)}>
       <button
         onClick={() => setOpen((o) => !o)}
+        aria-label={iconOnly ? current.label : undefined}
         className={cn(
-          'flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-[13px] font-semibold transition-colors duration-300',
+          'flex cursor-pointer items-center font-semibold transition-colors duration-300',
+          iconOnly ? 'h-8 w-8 justify-center rounded-full' : 'gap-2 rounded-full border px-3 py-2 text-[13px]',
           dark
             ? open
               ? 'border-brand-500/50 bg-brand-600/20 text-white'
               : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30 hover:text-white'
             : open
-              ? 'border-brand-600/40 bg-brand-600/10 text-brand-700'
-              : 'border-line bg-slate-900/[0.025] text-slate-500 hover:border-line-strong hover:text-slate-900'
+              ? cn('border-brand-600/40 bg-brand-600/10 text-brand-700', iconOnly && 'border')
+              : cn(
+                  'border-line bg-slate-900/[0.025] text-slate-500 hover:border-line-strong hover:text-slate-900',
+                  iconOnly && 'border'
+                )
         )}
       >
-        <Globe size={14} />
-        {current.label}
+        <Globe size={iconOnly ? 15 : 14} />
+        {!iconOnly && current.label}
       </button>
 
       <AnimatePresence>
@@ -49,7 +54,10 @@ export default function LanguageSwitcher({ className = '', dark = false }) {
             initial="hidden"
             animate="show"
             exit="exit"
-            className="glass absolute right-0 top-full z-50 mt-2 w-44 rounded-2xl p-1.5"
+            className={cn(
+              'glass absolute right-0 z-50 max-h-[60vh] w-44 overflow-y-auto rounded-2xl p-1.5',
+              openUp ? 'bottom-full mb-2' : 'top-full mt-2'
+            )}
           >
             {LANGUAGES.map((lang, i) => {
               const active = lang.code === i18n.language

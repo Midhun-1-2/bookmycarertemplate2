@@ -2,7 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, ChevronRight, Menu, X, MapPin, ArrowUpRight, Sparkles } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  Menu,
+  X,
+  MapPin,
+  ArrowUpRight,
+  Sparkles,
+  LogIn,
+  UserPlus,
+} from 'lucide-react'
 import { categoriesApi } from '../../lib/mockApi'
 import { getCategoryIcon, getCategoryEmoji } from '../../lib/icons'
 import { getCategoryPhotoUrl } from '../../lib/categoryImages'
@@ -36,7 +46,13 @@ export default function SplashNav() {
   const [mobileSection, setMobileSection] = useState(null)
 
   const { scrollY } = useScroll()
-  useMotionValueEvent(scrollY, 'change', (y) => setCondensed(y > 24))
+  // Left running while the drawer is open, this can flip the header's own
+  // background/blur transition mid-open — that repaint, half-visible through
+  // the backdrop, is what read as flicker. Freezing it while `mobileOpen` is
+  // true removes the interaction entirely.
+  useMotionValueEvent(scrollY, 'change', (y) => {
+    if (!mobileOpen) setCondensed(y > 24)
+  })
 
   // Closing on mouseleave immediately makes the menu vanish while the cursor is
   // still crossing the gap between the trigger and the dropdown. A short delay
@@ -300,14 +316,21 @@ export default function SplashNav() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div className="fixed inset-0 z-50 lg:hidden">
+            {/* A backdrop this translucent let the page's own animated glow
+                blobs and gradients keep moving underneath it, tinted but
+                still visibly shifting — that's what read as flicker,
+                especially mid-transition. Opaque enough hides that
+                entirely; matching duration/ease with the panel means the
+                two layers settle on the same frame instead of visibly
+                trailing each other. */}
             <motion.div
               aria-hidden
               onClick={() => setMobileOpen(false)}
-              className="absolute inset-0 bg-ink/35"
+              className="absolute inset-0 bg-ink/70"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.25 } }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
+              transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
             />
 
             <motion.div
@@ -315,19 +338,22 @@ export default function SplashNav() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%', transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
-              transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
+              transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
             >
               <div className="h-[3px] shrink-0 bg-gradient-to-r from-brand-600 to-brand-400" />
 
               <div className="flex h-13 shrink-0 items-center justify-between border-b border-line px-4">
                 <img src="/brand/wordmark.png" alt="Book My Carer" className="h-7 w-auto" />
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-900/[0.05] hover:text-slate-900"
-                  aria-label={t('sidebar.closeMenu')}
-                >
-                  <X size={15} />
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <LanguageSwitcher iconOnly />
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-900/[0.05] hover:text-slate-900"
+                    aria-label={t('sidebar.closeMenu')}
+                  >
+                    <X size={15} />
+                  </button>
+                </div>
               </div>
 
               <motion.nav
@@ -427,9 +453,6 @@ export default function SplashNav() {
                   </AnimatePresence>
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="flex justify-start py-3">
-                  <LanguageSwitcher />
-                </motion.div>
               </motion.nav>
 
               <motion.div
@@ -452,18 +475,23 @@ export default function SplashNav() {
                         <ArrowUpRight size={13} />
                       </Button>
                     </Link>
-                    {/* Secondary paths as plain small text, not more
-                        buttons — the primary CTA above is the one thing this
-                        footer should visually push. */}
-                    <div className="flex items-center justify-center gap-3 text-[11.5px] font-semibold">
-                      <Link to="/login/staff" className="text-slate-500 transition-colors hover:text-brand-700">
+                    {/* Two tints, not two identical outlines — a login and a
+                        signup read as different weights of action even when
+                        they're the same size, and that's what kept the pair
+                        from looking like one button rendered twice. */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        to="/login/staff"
+                        className="flex items-center justify-center gap-1.5 rounded-xl border border-brand-600/20 bg-brand-600/[0.06] py-2.5 text-[12.5px] font-semibold text-brand-700 transition-colors hover:bg-brand-600/[0.11]"
+                      >
+                        <LogIn size={13} />
                         {t('nav.caregiverLogin')}
                       </Link>
-                      <span className="text-line-strong">/</span>
                       <Link
                         to="/become-a-caregiver"
-                        className="text-slate-500 transition-colors hover:text-brand-700"
+                        className="flex items-center justify-center gap-1.5 rounded-xl border border-line bg-slate-900/[0.03] py-2.5 text-[12.5px] font-semibold text-slate-600 transition-colors hover:bg-slate-900/[0.06] hover:text-slate-900"
                       >
+                        <UserPlus size={13} />
                         {t('nav.becomeACaregiver')}
                       </Link>
                     </div>

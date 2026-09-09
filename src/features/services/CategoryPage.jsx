@@ -1,17 +1,24 @@
 import { Link, useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
-import { ArrowUpRight, IndianRupee, ArrowLeft } from 'lucide-react'
+import { ArrowUpRight, ArrowRight, IndianRupee, ArrowLeft } from 'lucide-react'
 import { categoriesApi, getServiceStartingPrice } from '../../lib/mockApi'
-import { getCategoryIcon } from '../../lib/icons'
-import { getCategoryPhotoUrl } from '../../lib/categoryImages'
+import { getCategoryEmoji } from '../../lib/icons'
 import { useSession } from '../../lib/session'
 import Button from '../../components/ui/Button'
-import Spotlight from '../../components/motion/Spotlight'
 import Reveal, { RevealGroup, RevealItem } from '../../components/motion/Reveal'
 import TextReveal from '../../components/motion/TextReveal'
-import { EASE_OUT_EXPO } from '../../lib/motion'
+import { cn } from '../../lib/cn'
+
+/** Cycled per service card so a category's grid reads as varied rather than
+ *  one flat colour — the left accent and the icon badge share a tone, five
+ *  wide so neighbours in a 3-column row rarely repeat. */
+const CARD_ACCENTS = [
+  { border: 'border-l-rose-300', badge: 'bg-rose-50 text-rose-500' },
+  { border: 'border-l-emerald-300', badge: 'bg-emerald-50 text-emerald-600' },
+  { border: 'border-l-amber-300', badge: 'bg-amber-50 text-amber-600' },
+  { border: 'border-l-violet-300', badge: 'bg-violet-50 text-violet-600' },
+  { border: 'border-l-sky-300', badge: 'bg-sky-50 text-sky-600' },
+]
 
 export default function CategoryPage() {
   const { t } = useTranslation()
@@ -19,109 +26,118 @@ export default function CategoryPage() {
   const { session } = useSession()
   const categories = categoriesApi.listSync()
   const category = categories.find((c) => c.slug === categorySlug)
-  const bannerRef = useRef(null)
-
-  // Hooks must run unconditionally, so this is set up before the early return.
-  const { scrollYProgress } = useScroll({
-    target: bannerRef,
-    offset: ['start start', 'end start'],
-  })
-  const bannerY = useTransform(scrollYProgress, [0, 1], ['0%', '22%'])
 
   if (!category) return <Navigate to="/services" replace />
 
-  const Icon = getCategoryIcon(category.icon)
+  const emoji = getCategoryEmoji(category.icon)
+  const words = category.name.split(' ')
 
   return (
-    <div>
-      {/* Full-bleed banner: the photo parallaxes behind a heavy gradient so the
-          title sits on near-black no matter how bright the image is. */}
-      <section ref={bannerRef} className="relative h-[22rem] overflow-hidden bg-ink sm:h-[28rem]">
-        <motion.img
-          src={getCategoryPhotoUrl(category.icon, { w: 1600, q: 80 })}
-          alt={category.name}
-          style={{ y: bannerY }}
-          className="absolute inset-0 h-[130%] w-full object-cover opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/75 to-ink/40" />
-        <div className="absolute inset-0 bg-gradient-to-r from-ink/85 via-transparent to-transparent" />
+    <div className="relative overflow-hidden">
+      {/* Decorative watermark: the category's own emoji, huge and faint,
+          scattered behind the content. Pet care gets paws, elder care gets a
+          person — it comes free from data instead of a hand-picked motif per
+          category, the way a hearts-and-paws background would need one. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 select-none overflow-hidden">
+        <span className="absolute -left-6 top-20 rotate-[-12deg] text-[9rem] opacity-[0.06] sm:text-[11rem]">
+          {emoji}
+        </span>
+        <span className="absolute right-0 top-[26rem] rotate-[8deg] text-[7rem] opacity-[0.05] sm:text-[9rem]">
+          {emoji}
+        </span>
+        <span className="absolute left-1/3 top-[52rem] rotate-[-6deg] text-[8rem] opacity-[0.05] sm:text-[10rem]">
+          {emoji}
+        </span>
+        <div className="absolute -left-24 top-40 h-72 w-72 rounded-full bg-brand-600/[0.07] blur-[100px]" />
+        <div className="absolute -right-24 bottom-10 h-72 w-72 rounded-full bg-accent-400/[0.08] blur-[100px]" />
+      </div>
 
-        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-12 sm:px-8">
-          <Reveal variant="fade">
-            <Link
-              to="/services"
-              className="group inline-flex items-center gap-2 text-[13px] font-semibold text-white/60 transition-colors hover:text-white"
-            >
-              <ArrowLeft
-                size={14}
-                className="transition-transform duration-300 group-hover:-translate-x-1"
-              />
-              {t('servicesListPage.title')}
-            </Link>
-          </Reveal>
+      <section className="relative mx-auto max-w-7xl px-5 pt-10 sm:px-8 sm:pt-14">
+        <Reveal variant="fade">
+          <Link
+            to="/services"
+            className="group inline-flex items-center gap-2 text-[13px] font-semibold text-slate-500 transition-colors hover:text-brand-700"
+          >
+            <ArrowLeft
+              size={14}
+              className="transition-transform duration-300 group-hover:-translate-x-1"
+            />
+            {t('servicesListPage.title')}
+          </Link>
+        </Reveal>
 
-          <div className="mt-6 flex items-end gap-5">
-            <motion.span
-              initial={{ opacity: 0, scale: 0.8, rotate: -8 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: EASE_OUT_EXPO }}
-              className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/25 bg-white/10 text-white backdrop-blur-md sm:flex"
-            >
-              <Icon size={26} />
-            </motion.span>
-            <div className="min-w-0">
-              <TextReveal
-                text={category.name}
-                as="h1"
-                animateOnMount
-                delay={0.15}
-                className="text-4xl font-semibold leading-[1.02] tracking-tight text-white sm:text-6xl"
-              />
-            </div>
-          </div>
-
-          <Reveal delay={0.3}>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/70 sm:text-base">
-              {category.description}
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 pb-20 pt-12 sm:px-8">
-        <div className="mb-8 flex items-center gap-4">
-          <span className="eyebrow shrink-0 text-brand-700">
+        <Reveal variant="fade" delay={0.05}>
+          <span className="eyebrow mt-6 inline-block text-brand-700">
             {String(category.services.length).padStart(2, '0')} {t('nav.servicesCount')}
           </span>
-          <span className="rule-fade flex-1" />
+        </Reveal>
+
+        <div className="mt-4 flex items-end gap-5">
+          <span className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-3xl sm:flex">
+            {emoji}
+          </span>
+          <TextReveal
+            text={category.name}
+            as="h1"
+            animateOnMount
+            delay={0.1}
+            highlight={[words.length - 1]}
+            className="text-4xl font-semibold leading-[1.02] tracking-tight text-slate-900 sm:text-6xl"
+          />
         </div>
 
-        <RevealGroup gap={0.06} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {category.services.map((service) => {
+        <Reveal delay={0.25}>
+          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-500 sm:text-base">
+            {category.description}
+          </p>
+        </Reveal>
+      </section>
+
+      <section className="relative mx-auto max-w-7xl px-5 pb-20 pt-10 sm:px-8">
+        <RevealGroup gap={0.06} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {category.services.map((service, i) => {
             const price = service.priceFrom ?? getServiceStartingPrice(service.id)
+            const accent = CARD_ACCENTS[i % CARD_ACCENTS.length]
             return (
               <RevealItem key={service.id}>
-                <Spotlight className="glass flex h-full flex-col justify-between rounded-2xl p-5 transition-[border-color,transform] duration-400 hover:-translate-y-1 hover:border-brand-600/40">
+                <div
+                  className={cn(
+                    'glass flex h-full flex-col justify-between rounded-2xl border-l-4 p-5 transition-[transform,box-shadow] duration-400 hover:-translate-y-1',
+                    accent.border
+                  )}
+                >
                   <div>
-                    <h3 className="text-lg font-semibold leading-snug tracking-tight text-slate-900">
-                      {service.name}
-                    </h3>
+                    <div className="flex items-start gap-3.5">
+                      <span
+                        className={cn(
+                          'flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl',
+                          accent.badge
+                        )}
+                      >
+                        {emoji}
+                      </span>
+                      <h3 className="pt-1.5 text-lg font-semibold leading-snug tracking-tight text-slate-900">
+                        {service.name}
+                      </h3>
+                    </div>
+
                     {price != null && (
-                      <p className="mt-3 flex items-baseline gap-2">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
+                      <div className="mt-4">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
                           {t('categoryPage.startingFrom')}
-                        </span>
-                        <span className="inline-flex items-center font-display text-2xl font-semibold text-brand-700">
-                          <IndianRupee size={15} />
+                        </p>
+                        <p className="mt-0.5 flex items-baseline gap-1 font-display text-2xl font-bold text-brand-600">
+                          <IndianRupee size={17} />
                           {price}
-                          <span className="ml-0.5 font-sans text-xs font-normal text-slate-400">
+                          <span className="font-sans text-xs font-normal text-slate-400">
                             {t('common.perHour')}
                           </span>
-                        </span>
-                      </p>
+                        </p>
+                      </div>
                     )}
                   </div>
-                  <div className="mt-6 flex flex-wrap gap-2">
+
+                  <div className="mt-5 flex flex-wrap items-center gap-4">
                     <Link
                       to={
                         session?.role === 'user'
@@ -134,13 +150,18 @@ export default function CategoryPage() {
                         <ArrowUpRight size={14} />
                       </Button>
                     </Link>
-                    <Link to={`/services/${category.slug}/${service.id}`}>
-                      <Button variant="ghost" size="sm">
-                        {t('categoryPage.details')}
-                      </Button>
+                    <Link
+                      to={`/services/${category.slug}/${service.id}`}
+                      className="group inline-flex items-center gap-1 text-[13px] font-semibold text-slate-500 transition-colors hover:text-brand-700"
+                    >
+                      {t('categoryPage.details')}
+                      <ArrowRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover:translate-x-0.5"
+                      />
                     </Link>
                   </div>
-                </Spotlight>
+                </div>
               </RevealItem>
             )
           })}

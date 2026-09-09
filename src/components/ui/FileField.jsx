@@ -37,6 +37,10 @@ export default function FileField({
   maxBytes = 5 * MB,
   id,
   className,
+  // Single-line variant: a `h-11` control that lines up with an `Input` beside
+  // it, for rows where the dashed-box treatment would cost more height than
+  // the row can spare (e.g. a repeatable list of many rows).
+  compact = false,
 }) {
   const { t } = useTranslation()
   const reactId = useId()
@@ -112,18 +116,30 @@ export default function FileField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
             transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-            className="flex items-center gap-3 rounded-xl border border-brand-600/30 bg-brand-600/[0.06] px-3.5 py-3"
+            className={cn(
+              'flex items-center gap-3 rounded-xl border border-brand-600/30 bg-brand-600/[0.06]',
+              compact ? 'h-11 px-3' : 'px-3.5 py-3'
+            )}
           >
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-brand-600/25 bg-surface text-brand-700">
-              {isImage ? <ImageIcon size={15} /> : <FileText size={15} />}
-            </span>
+            {!compact && (
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-brand-600/25 bg-surface text-brand-700">
+                {isImage ? <ImageIcon size={15} /> : <FileText size={15} />}
+              </span>
+            )}
             <span className="min-w-0 flex-1">
-              <span className="block truncate text-[13px] font-semibold text-slate-900">
+              <span
+                className={cn(
+                  'block truncate font-semibold text-slate-900',
+                  compact ? 'text-xs' : 'text-[13px]'
+                )}
+              >
                 {value.name}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-slate-400">
-                {formatSize(value.size)}
-              </span>
+              {!compact && (
+                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-slate-400">
+                  {formatSize(value.size)}
+                </span>
+              )}
             </span>
             <motion.button
               type="button"
@@ -158,7 +174,8 @@ export default function FileField({
             exit={{ opacity: 0, y: -6, transition: { duration: 0.15 } }}
             transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
             className={cn(
-              'flex w-full cursor-pointer items-center gap-3 rounded-xl border border-dashed px-3.5 py-3 text-left transition-colors duration-300',
+              'flex w-full cursor-pointer items-center text-left transition-colors duration-300',
+              compact ? 'h-11 gap-2 rounded-xl border border-dashed px-3' : 'gap-3 rounded-xl border border-dashed px-3.5 py-3',
               dragging
                 ? 'border-brand-600 bg-brand-600/[0.08]'
                 : 'border-line-strong bg-slate-900/[0.02] hover:border-brand-600/50 hover:bg-brand-600/[0.04]',
@@ -167,22 +184,29 @@ export default function FileField({
           >
             <span
               className={cn(
-                'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-colors duration-300',
+                'flex shrink-0 items-center justify-center rounded-lg border transition-colors duration-300',
+                compact ? 'h-6 w-6' : 'h-9 w-9',
                 dragging
                   ? 'border-brand-600/40 bg-brand-600/15 text-brand-700'
                   : 'border-line bg-surface text-slate-400'
               )}
             >
-              <Upload size={15} />
+              <Upload size={compact ? 12 : 15} />
             </span>
-            <span className="min-w-0">
-              <span className="block text-[13px] font-semibold text-slate-700">
+            {compact ? (
+              <span className="truncate text-xs font-semibold text-slate-700">
                 {dragging ? t('fileField.dropNow') : t('fileField.cta')}
               </span>
-              <span className="block font-mono text-[10px] uppercase tracking-[0.12em] text-slate-400">
-                {t('fileField.hint', { size: formatSize(maxBytes) })}
+            ) : (
+              <span className="min-w-0">
+                <span className="block text-[13px] font-semibold text-slate-700">
+                  {dragging ? t('fileField.dropNow') : t('fileField.cta')}
+                </span>
+                <span className="block font-mono text-[10px] uppercase tracking-[0.12em] text-slate-400">
+                  {t('fileField.hint', { size: formatSize(maxBytes) })}
+                </span>
               </span>
-            </span>
+            )}
           </motion.button>
         )}
       </AnimatePresence>

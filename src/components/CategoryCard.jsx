@@ -1,85 +1,68 @@
 import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import { ArrowUpRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { getCategoryIcon } from '../lib/icons'
-import { getCategoryPhotoUrl } from '../lib/categoryImages'
-import Spotlight from './motion/Spotlight'
-import Tilt from './motion/Tilt'
-import { EASE_OUT_EXPO } from '../lib/motion'
+import { getCategoryEmoji, getCategoryTint } from '../lib/icons'
+import { SPRING_SOFT } from '../lib/motion'
+import { cn } from '../lib/cn'
 
 /**
  * Category tile.
  *
- * Photography sits desaturated and dimmed until the pointer arrives, then
- * saturates and pushes in — the image is atmosphere at rest and content on
- * hover, which keeps a grid of eight from turning into a photo collage.
- *
- * Layered: Tilt (3D lean) wraps Spotlight (cursor-tracked ember pool) wraps the
- * card body, so all three read as one physical response to the same gesture.
+ * A flat catalogue card rather than a photo tile — a pastel emoji badge reads
+ * faster across a grid of eight than a monochrome glyph would, and the muted
+ * service line under the description carries the "what's actually in here"
+ * job a photo used to. The arrow only appears on hover, next to the title,
+ * rather than living as a separate "explore" line at the bottom.
  */
 export default function CategoryCard({ category, showServices = false }) {
-  const { t } = useTranslation()
-  const Icon = getCategoryIcon(category.icon)
+  const emoji = getCategoryEmoji(category.icon)
+  const tint = getCategoryTint(category.icon)
+  const tagline = category.services
+    .slice(0, 2)
+    .map((s) => s.name)
+    .join(' · ')
 
   return (
-    <Tilt className="h-full" max={5} lift={5}>
-      <Link to={`/services/${category.slug}`} className="block h-full">
-        <Spotlight className="glass group flex h-full flex-col rounded-3xl transition-[border-color] duration-500 hover:border-brand-600/40">
-          <div className="relative h-44 w-full overflow-hidden rounded-t-3xl">
-            <img
-              src={getCategoryPhotoUrl(category.icon, { w: 640 })}
-              alt={category.name}
-              loading="lazy"
-              className="h-full w-full scale-105 object-cover grayscale-[0.3] transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:grayscale-0"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/15 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-br from-ink/25 to-transparent" />
+    <motion.div whileHover={{ y: -4 }} transition={SPRING_SOFT} className="h-full">
+      <Link
+        to={`/services/${category.slug}`}
+        className="group glass flex h-full flex-col rounded-3xl p-6 transition-[border-color,box-shadow] duration-400 hover:border-brand-600/35 hover:shadow-[0_2px_4px_rgba(35,31,32,0.05),0_22px_44px_-24px_rgba(35,31,32,0.35)]"
+      >
+        <span
+          className={cn(
+            'flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl',
+            tint
+          )}
+        >
+          {emoji}
+        </span>
 
-            <motion.span
-              whileHover={{ rotate: -6 }}
-              transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-              className="absolute left-5 top-5 flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-surface/95 text-brand-700 shadow-sm backdrop-blur-md transition-colors duration-500 group-hover:border-brand-600 group-hover:bg-brand-600 group-hover:text-white"
-            >
-              <Icon size={19} />
-            </motion.span>
+        <h3 className="mt-5 flex items-center gap-1.5 text-lg font-semibold leading-snug tracking-tight text-slate-900">
+          {category.name}
+          <ArrowUpRight
+            size={16}
+            className="shrink-0 -translate-x-1 text-brand-600 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+          />
+        </h3>
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">
+          {category.description}
+        </p>
 
-            <span className="absolute right-5 top-5 rounded-full border border-white/30 bg-ink/55 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white backdrop-blur-md">
-              {String(category.services.length).padStart(2, '0')}
-            </span>
-          </div>
+        {tagline && <p className="mt-3 text-xs font-medium text-slate-400">{tagline}</p>}
 
-          <div className="flex flex-1 flex-col p-5 pt-1">
-            <h3 className="text-lg font-semibold leading-snug tracking-tight text-slate-900">
-              {category.name}
-            </h3>
-            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-500">
-              {category.description}
-            </p>
-
-            {showServices && (
-              <ul className="mt-4 flex flex-wrap gap-1.5">
-                {category.services.slice(0, 3).map((s) => (
-                  <li
-                    key={s.id}
-                    className="rounded-full border border-line bg-slate-900/[0.025] px-2.5 py-1 text-[11px] font-medium text-slate-500"
-                  >
-                    {s.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <span className="mt-auto flex items-center gap-1.5 pt-5 text-[13px] font-semibold text-brand-700">
-              {t('browse.explore')}
-              <ArrowUpRight
-                size={15}
-                className="transition-transform duration-400 group-hover:translate-x-1 group-hover:-translate-y-1"
-              />
-            </span>
-          </div>
-        </Spotlight>
+        {showServices && (
+          <ul className="mt-4 flex flex-wrap gap-1.5">
+            {category.services.slice(0, 3).map((s) => (
+              <li
+                key={s.id}
+                className="rounded-full border border-line bg-slate-900/[0.025] px-2.5 py-1 text-[11px] font-medium text-slate-500"
+              >
+                {s.name}
+              </li>
+            ))}
+          </ul>
+        )}
       </Link>
-    </Tilt>
+    </motion.div>
   )
 }

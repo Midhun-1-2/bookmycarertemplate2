@@ -121,7 +121,7 @@ function SidebarContent({ items, session, onLogout }) {
 
 export default function Sidebar({ items, session, onLogout }) {
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-line bg-void/60 backdrop-blur-xl lg:block">
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-line bg-void/85 backdrop-blur-md lg:block">
       <SidebarContent items={items} session={session} onLogout={onLogout} />
     </aside>
   )

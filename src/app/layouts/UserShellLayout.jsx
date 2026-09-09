@@ -32,7 +32,7 @@ export default function UserShellLayout() {
     <div className="flex min-h-svh flex-col pb-24 lg:pb-0">
       <ScrollProgress />
 
-      <header className="sticky top-0 z-40 border-b border-line bg-void/72 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-line bg-void/85 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
           <Link to="/user/dashboard" className="flex shrink-0 items-center">
             <img src="/brand/wordmark.png" alt="Book My Carer" className="h-10 w-auto sm:h-11" />

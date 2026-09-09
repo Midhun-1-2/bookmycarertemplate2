@@ -43,7 +43,11 @@ export default function Footer() {
         className="pointer-events-none absolute -bottom-48 left-1/2 h-96 w-[52rem] -translate-x-1/2 animate-ember rounded-full bg-brand-600/25 blur-[110px]"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 pb-10 pt-16 sm:px-8">
+      {/* Extra bottom clearance on mobile only: the chat launcher is a fixed
+          `bottom-5` circle that isn't part of document flow, so nothing here
+          naturally makes room for it — without this the last line sits
+          directly under the button. */}
+      <div className="relative mx-auto max-w-7xl px-5 pb-24 pt-16 sm:px-8 sm:pb-10">
         <div className="grid gap-12 md:grid-cols-[1.2fr_2fr]">
           <Reveal>
             {/* The supplied wordmark is black lettering; on the ink band it is

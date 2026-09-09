@@ -68,7 +68,12 @@ export default function BottomNav({ items }) {
       initial={{ y: 90, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ ...SPRING_SOFT, delay: 0.2 }}
-      className="fixed inset-x-3 bottom-[max(0.75rem,calc(env(safe-area-inset-bottom)+0.4rem))] z-30 rounded-3xl border border-line bg-surface/92 shadow-[0_18px_40px_-18px_rgba(35,31,32,0.4)] backdrop-blur-2xl lg:hidden"
+      // `fixed` + a heavy blur is the worst combination for scroll smoothness:
+      // it re-renders the blur under this bar on every single scroll frame,
+      // for as long as the user is on a mobile screen. `md` keeps the frosted
+      // look at a small fraction of the cost; the higher fill opacity keeps
+      // it reading solid despite the lighter blur.
+      className="fixed inset-x-3 bottom-[max(0.75rem,calc(env(safe-area-inset-bottom)+0.4rem))] z-30 rounded-3xl border border-line bg-surface/97 shadow-[0_18px_40px_-18px_rgba(35,31,32,0.4)] backdrop-blur-md lg:hidden"
       aria-label={t('sidebar.menu')}
     >
       <div className="no-scrollbar flex snap-x snap-mandatory items-stretch justify-around gap-0.5 overflow-x-auto px-2 py-2">

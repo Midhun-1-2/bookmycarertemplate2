@@ -6,7 +6,7 @@ import { LANGUAGES } from '../../i18n'
 import { cn } from '../../lib/cn'
 import { dropdown, EASE_OUT_EXPO } from '../../lib/motion'
 
-export default function LanguageSwitcher({ className = '' }) {
+export default function LanguageSwitcher({ className = '', dark = false }) {
   const { i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
@@ -29,9 +29,13 @@ export default function LanguageSwitcher({ className = '' }) {
         onClick={() => setOpen((o) => !o)}
         className={cn(
           'flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2 text-[13px] font-semibold transition-colors duration-300',
-          open
-            ? 'border-brand-600/40 bg-brand-600/10 text-brand-700'
-            : 'border-line bg-slate-900/[0.025] text-slate-500 hover:border-line-strong hover:text-slate-900'
+          dark
+            ? open
+              ? 'border-brand-500/50 bg-brand-600/20 text-white'
+              : 'border-white/15 bg-white/5 text-white/70 hover:border-white/30 hover:text-white'
+            : open
+              ? 'border-brand-600/40 bg-brand-600/10 text-brand-700'
+              : 'border-line bg-slate-900/[0.025] text-slate-500 hover:border-line-strong hover:text-slate-900'
         )}
       >
         <Globe size={14} />

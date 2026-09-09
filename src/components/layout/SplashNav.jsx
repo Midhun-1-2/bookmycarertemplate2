@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { ChevronDown, Menu, X, MapPin, ArrowUpRight, Sparkles } from 'lucide-react'
+import { ChevronDown, ChevronRight, Menu, X, MapPin, ArrowUpRight, Sparkles } from 'lucide-react'
 import { categoriesApi } from '../../lib/mockApi'
-import { getCategoryIcon } from '../../lib/icons'
+import { getCategoryIcon, getCategoryEmoji } from '../../lib/icons'
 import { getCategoryPhotoUrl } from '../../lib/categoryImages'
 import { useSession } from '../../lib/session'
 import { ROLE_HOME } from '../../app/roleConfig'
@@ -95,7 +95,15 @@ export default function SplashNav() {
               : '0 0 0 0 rgba(35,31,32,0)',
           }}
           transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-          className="pointer-events-auto mx-auto flex h-16 max-w-7xl items-center justify-between rounded-2xl border px-3 backdrop-blur-xl sm:px-4"
+          // Blur is real GPU cost, paid on every scroll frame while this bar
+          // is stuck to the top. It's only visible once the bar has a
+          // translucent fill to frost, so it's off entirely at the top of the
+          // page — and even condensed, `md` reads as the same frosted glass
+          // for a fraction of what `xl` cost.
+          className={cn(
+            'pointer-events-auto mx-auto flex h-16 max-w-7xl items-center justify-between rounded-2xl border px-3 sm:px-4',
+            condensed && 'backdrop-blur-md'
+          )}
         >
           <Link to="/" className="flex shrink-0 items-center" aria-label="Book My Carer">
             <motion.img
@@ -283,62 +291,73 @@ export default function SplashNav() {
         </motion.div>
       </header>
 
-      {/* Mobile: a full-bleed panel rather than a drawer. On a phone the menu is
-          the whole task, so it gets the whole screen and the items cascade in. */}
+      {/* Mobile: a narrow, light, compact panel — no dark theme, no giant
+          type, no icon-in-a-box rows. A thin brand-red rule at the top is
+          the only colour move; everything else is small text on hairline
+          dividers, which is what keeps a menu with three expandable
+          sections from feeling heavier than it is. Still opacity/transform
+          only (no clip-path, no animated blur), so it stays flicker-free. */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            className="fixed inset-0 z-50 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.2 } }}
-          >
+          <motion.div className="fixed inset-0 z-50 lg:hidden">
             <motion.div
-              className="absolute inset-0 overflow-y-auto bg-void/97 backdrop-blur-2xl"
-              initial={{ clipPath: 'circle(0% at calc(100% - 2.5rem) 2.5rem)' }}
-              animate={{ clipPath: 'circle(150% at calc(100% - 2.5rem) 2.5rem)' }}
-              exit={{
-                clipPath: 'circle(0% at calc(100% - 2.5rem) 2.5rem)',
-                transition: { duration: 0.4, ease: EASE_OUT_EXPO },
-              }}
-              transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+              aria-hidden
+              onClick={() => setMobileOpen(false)}
+              className="absolute inset-0 bg-ink/35"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.25 } }}
+              transition={{ duration: 0.3 }}
+            />
+
+            <motion.div
+              className="absolute right-0 top-0 flex h-full w-[78%] max-w-xs flex-col bg-surface shadow-[-20px_0_50px_-24px_rgba(35,31,32,0.45)]"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%', transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
+              transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
             >
-              <div className="flex h-16 items-center justify-between px-5 pt-3">
-                <img src="/brand/wordmark.png" alt="Book My Carer" className="h-10 w-auto" />
+              <div className="h-[3px] shrink-0 bg-gradient-to-r from-brand-600 to-brand-400" />
+
+              <div className="flex h-13 shrink-0 items-center justify-between border-b border-line px-4">
+                <img src="/brand/wordmark.png" alt="Book My Carer" className="h-7 w-auto" />
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-slate-900/[0.03] text-slate-600"
+                  className="flex h-7 w-7 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-900/[0.05] hover:text-slate-900"
                   aria-label={t('sidebar.closeMenu')}
                 >
-                  <X size={19} />
+                  <X size={15} />
                 </button>
               </div>
 
-              <motion.div
-                variants={stagger(0.05, 0.15)}
+              <motion.nav
+                variants={stagger(0.04, 0.06)}
                 initial="hidden"
                 animate="show"
-                className="px-5 pb-16 pt-6"
+                className="flex-1 overflow-y-auto px-4"
               >
-                <motion.div variants={fadeUp}>
-                  <Link
-                    to="/"
-                    className="block border-b border-line py-4 font-display text-3xl font-semibold text-slate-900"
-                  >
-                    {t('nav.home')}
+                <motion.div variants={fadeUp} className="border-b border-line">
+                  <Link to="/" className="group flex items-center justify-between py-3">
+                    <span className="text-sm font-semibold text-slate-800">{t('nav.home')}</span>
+                    <ChevronRight
+                      size={14}
+                      className="shrink-0 text-slate-300 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-brand-600"
+                    />
                   </Link>
                 </motion.div>
 
                 <motion.div variants={fadeUp} className="border-b border-line">
                   <button
                     onClick={() => setMobileSection(mobileSection === 'services' ? null : 'services')}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left font-display text-3xl font-semibold text-slate-900"
+                    className="flex w-full cursor-pointer items-center justify-between py-3 text-left"
                   >
-                    {t('nav.careTypeServices')}
+                    <span className="text-sm font-semibold text-slate-800">
+                      {t('nav.careTypeServices')}
+                    </span>
                     <ChevronDown
-                      size={22}
+                      size={14}
                       className={cn(
-                        'shrink-0 text-brand-500 transition-transform duration-400',
+                        'shrink-0 text-slate-400 transition-transform duration-300',
                         mobileSection === 'services' && 'rotate-180'
                       )}
                     />
@@ -352,20 +371,17 @@ export default function SplashNav() {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <div className="grid grid-cols-2 gap-2 pb-4">
-                          {categories.map((cat) => {
-                            const Icon = getCategoryIcon(cat.icon)
-                            return (
-                              <Link
-                                key={cat.id}
-                                to={`/services/${cat.slug}`}
-                                className="flex items-center gap-2.5 rounded-xl border border-line bg-slate-900/[0.025] px-3 py-3 text-[13px] font-medium leading-snug text-slate-700"
-                              >
-                                <Icon size={16} className="shrink-0 text-brand-500" />
-                                {cat.name}
-                              </Link>
-                            )
-                          })}
+                        <div className="grid grid-cols-2 gap-1.5 pb-3">
+                          {categories.map((cat) => (
+                            <Link
+                              key={cat.id}
+                              to={`/services/${cat.slug}`}
+                              className="flex items-center gap-1.5 rounded-lg border border-line bg-slate-900/[0.02] px-2 py-2 text-[11px] font-medium leading-snug text-slate-600 transition-colors hover:border-brand-600/30 hover:bg-brand-600/[0.04] hover:text-slate-900"
+                            >
+                              <span className="shrink-0 text-xs">{getCategoryEmoji(cat.icon)}</span>
+                              <span className="line-clamp-2">{cat.name}</span>
+                            </Link>
+                          ))}
                         </div>
                       </motion.div>
                     )}
@@ -375,13 +391,13 @@ export default function SplashNav() {
                 <motion.div variants={fadeUp} className="border-b border-line">
                   <button
                     onClick={() => setMobileSection(mobileSection === 'location' ? null : 'location')}
-                    className="flex w-full cursor-pointer items-center justify-between py-4 text-left font-display text-3xl font-semibold text-slate-900"
+                    className="flex w-full cursor-pointer items-center justify-between py-3 text-left"
                   >
-                    {t('nav.location')}
+                    <span className="text-sm font-semibold text-slate-800">{t('nav.location')}</span>
                     <ChevronDown
-                      size={22}
+                      size={14}
                       className={cn(
-                        'shrink-0 text-brand-500 transition-transform duration-400',
+                        'shrink-0 text-slate-400 transition-transform duration-300',
                         mobileSection === 'location' && 'rotate-180'
                       )}
                     />
@@ -395,12 +411,13 @@ export default function SplashNav() {
                         exit="exit"
                         className="overflow-hidden"
                       >
-                        <div className="flex flex-wrap gap-2 pb-4">
+                        <div className="flex flex-wrap gap-1.5 pb-3">
                           {LOCATIONS.map((loc) => (
                             <span
                               key={loc}
-                              className="rounded-full border border-line bg-slate-900/[0.025] px-3 py-1.5 text-xs text-slate-600"
+                              className="inline-flex items-center gap-1 rounded-full border border-line bg-slate-900/[0.02] px-2.5 py-1 text-[10.5px] font-medium text-slate-600"
                             >
+                              <MapPin size={10} className="text-slate-400" />
                               {loc}
                             </span>
                           ))}
@@ -410,38 +427,48 @@ export default function SplashNav() {
                   </AnimatePresence>
                 </motion.div>
 
-                <motion.div variants={fadeUp} className="mt-6">
+                <motion.div variants={fadeUp} className="flex justify-start py-3">
                   <LanguageSwitcher />
                 </motion.div>
+              </motion.nav>
 
-                <motion.div variants={fadeUp} className="mt-6 flex flex-col gap-2.5">
-                  {session ? (
-                    <Link to={ROLE_HOME[session.role]}>
-                      <Button className="w-full" size="lg" variant="secondary">
-                        {t('nav.dashboard')}
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                animate="show"
+                className="shrink-0 space-y-2 border-t border-line px-4 py-3"
+              >
+                {session ? (
+                  <Link to={ROLE_HOME[session.role]}>
+                    <Button className="w-full" size="sm" variant="secondary">
+                      {t('nav.dashboard')}
+                    </Button>
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/login/user">
+                      <Button className="w-full" size="sm" variant="primary">
+                        {t('nav.loginBookNow')}
+                        <ArrowUpRight size={13} />
                       </Button>
                     </Link>
-                  ) : (
-                    <>
-                      <Link to="/login/user">
-                        <Button className="w-full" size="lg" variant="primary">
-                          {t('nav.loginBookNow')}
-                          <ArrowUpRight size={16} />
-                        </Button>
+                    {/* Secondary paths as plain small text, not more
+                        buttons — the primary CTA above is the one thing this
+                        footer should visually push. */}
+                    <div className="flex items-center justify-center gap-3 text-[11.5px] font-semibold">
+                      <Link to="/login/staff" className="text-slate-500 transition-colors hover:text-brand-700">
+                        {t('nav.caregiverLogin')}
                       </Link>
-                      <Link to="/login/staff">
-                        <Button className="w-full" size="lg" variant="outline">
-                          {t('nav.caregiverLogin')}
-                        </Button>
+                      <span className="text-line-strong">/</span>
+                      <Link
+                        to="/become-a-caregiver"
+                        className="text-slate-500 transition-colors hover:text-brand-700"
+                      >
+                        {t('nav.becomeACaregiver')}
                       </Link>
-                      <Link to="/become-a-caregiver">
-                        <Button className="w-full" size="lg" variant="ghost">
-                          {t('nav.becomeACaregiver')}
-                        </Button>
-                      </Link>
-                    </>
-                  )}
-                </motion.div>
+                    </div>
+                  </>
+                )}
               </motion.div>
             </motion.div>
           </motion.div>

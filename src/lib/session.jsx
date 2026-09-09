@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { usersApi, staffApi, adminsApi } from './mockApi'
+import { usersApi, staffApi, adminsApi, seedDemoUserBookings } from './mockApi'
 
 const SESSION_KEY = 'bmc:session'
 const SessionContext = createContext(null)
@@ -34,6 +34,10 @@ export function SessionProvider({ children }) {
     if (!account) {
       account = { id: `user-${Date.now()}`, name: name || 'New Care Seeker', phone, city: '', area: '' }
       await usersApi.create(account)
+      // Only for a genuinely first-time number — a returning seeker (the
+      // seeded demo account included) already has real history and shouldn't
+      // have three more bookings appended to it every time they log in.
+      await seedDemoUserBookings(account.id, { name: account.name, phone })
     }
     const next = { id: account.id, name: account.name, phone, role: 'user' }
     setSession(next)

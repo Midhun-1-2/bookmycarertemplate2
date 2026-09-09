@@ -107,6 +107,93 @@ export async function createBooking(data) {
   return booking
 }
 
+// Templates for a brand-new care seeker's booking history. Real IDs, pulled
+// from the same categories/services/staff the rest of the seed data uses, so
+// these render exactly like any other booking — detail page, staff lookup,
+// review flow included.
+const DEMO_BOOKING_TEMPLATES = [
+  {
+    categoryId: 'cat-elder-disability',
+    serviceId: 'svc-elder-companion-care',
+    serviceName: 'Elder Companion Care',
+    staffId: 'staff-4',
+    scheduleType: 'daily',
+    daysAgo: 28,
+    durationHours: 3,
+    time: '09:00',
+    amount: 1200,
+    careTags: ['Mobility Assistance'],
+  },
+  {
+    categoryId: 'cat-nursing-clinical',
+    serviceId: 'svc-post-operative-care',
+    serviceName: 'Post-Operative Care',
+    staffId: 'staff-2',
+    scheduleType: 'daily',
+    daysAgo: 17,
+    durationHours: 1,
+    time: '18:00',
+    amount: 3600,
+    careTags: ['Post-Surgery'],
+  },
+  {
+    categoryId: 'cat-personal-daily-living',
+    serviceId: 'svc-domestic-assistance-cleaning',
+    serviceName: 'Domestic Assistance / Cleaning',
+    staffId: 'staff-3',
+    scheduleType: 'weekly',
+    daysAgo: 6,
+    durationHours: 3,
+    time: '09:00',
+    amount: 750,
+    careTags: [],
+  },
+]
+
+// A first-time care seeker otherwise starts with an empty "My Bookings" —
+// which also means there's nothing to click into to demo the detail page,
+// check-in/out flow, or review form. Every new account gets the same three
+// completed bookings, dated relative to whenever the demo is actually run
+// (not a fixed calendar date) so they stay genuinely in the past.
+export async function seedDemoUserBookings(userId, { name, phone }) {
+  for (const tpl of DEMO_BOOKING_TEMPLATES) {
+    const start = new Date()
+    start.setDate(start.getDate() - tpl.daysAgo)
+    const startDate = start.toISOString().slice(0, 10)
+
+    const [hour, minute] = tpl.time.split(':').map(Number)
+    const checkInAt = new Date(start)
+    checkInAt.setHours(hour, minute + 5, 0, 0)
+    const checkOutAt = new Date(checkInAt)
+    checkOutAt.setHours(checkOutAt.getHours() + tpl.durationHours)
+    const createdAt = new Date(start)
+    createdAt.setDate(createdAt.getDate() - 1)
+
+    await bookingsApi.create({
+      id: genId('booking'),
+      userId,
+      categoryId: tpl.categoryId,
+      serviceId: tpl.serviceId,
+      serviceName: tpl.serviceName,
+      staffId: tpl.staffId,
+      scheduleType: tpl.scheduleType,
+      startDate,
+      time: tpl.time,
+      address: '12 Marine Drive, Kakkanad, Kochi',
+      contactName: name,
+      contactPhone: phone,
+      emergencyContact: phone,
+      careTags: tpl.careTags,
+      status: 'completed',
+      payment: { status: 'paid', amount: tpl.amount },
+      checkInOtp: null,
+      checkIn: checkInAt.toISOString(),
+      checkOut: checkOutAt.toISOString(),
+      createdAt: createdAt.toISOString(),
+    })
+  }
+}
+
 export async function matchStaffForBooking(booking) {
   const staff = await staffApi.list()
   return staff

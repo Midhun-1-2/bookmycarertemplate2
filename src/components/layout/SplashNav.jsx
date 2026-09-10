@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-
 import { useTranslation } from 'react-i18next'
 import {
   ChevronDown,
-  ChevronRight,
   Menu,
   X,
   MapPin,
@@ -12,18 +11,21 @@ import {
   Sparkles,
   LogIn,
   UserPlus,
+  Home as HomeIcon,
+  LayoutGrid,
 } from 'lucide-react'
 import { categoriesApi } from '../../lib/mockApi'
-import { getCategoryIcon, getCategoryEmoji } from '../../lib/icons'
+import { getCategoryIcon } from '../../lib/icons'
 import { getCategoryPhotoUrl } from '../../lib/categoryImages'
 import { useSession } from '../../lib/session'
 import { ROLE_HOME } from '../../app/roleConfig'
 import Button from '../ui/Button'
 import LanguageSwitcher from './LanguageSwitcher'
 import { cn } from '../../lib/cn'
-import { EASE_OUT_EXPO, collapse, stagger, fadeUp } from '../../lib/motion'
+import { EASE_OUT_EXPO, stagger, fadeUp } from '../../lib/motion'
 
 const LOCATIONS = ['Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Bengaluru', 'Chennai', 'Mumbai']
+const MOBILE_TAB_ORDER = ['services', 'location']
 
 /**
  * Public header.
@@ -43,7 +45,15 @@ export default function SplashNav() {
   const [servicesOpen, setServicesOpen] = useState(false)
   const [locationOpen, setLocationOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [mobileSection, setMobileSection] = useState(null)
+  const [mobileTab, setMobileTab] = useState('services')
+  const [tabDirection, setTabDirection] = useState(1)
+
+  // Slide direction follows the tab's position left-to-right, so switching
+  // reads as moving along a strip rather than an arbitrary crossfade.
+  function selectMobileTab(key) {
+    setTabDirection(MOBILE_TAB_ORDER.indexOf(key) > MOBILE_TAB_ORDER.indexOf(mobileTab) ? 1 : -1)
+    setMobileTab(key)
+  }
 
   const { scrollY } = useScroll()
   // Left running while the drawer is open, this can flip the header's own
@@ -307,22 +317,14 @@ export default function SplashNav() {
         </motion.div>
       </header>
 
-      {/* Mobile: a narrow, light, compact panel — no dark theme, no giant
-          type, no icon-in-a-box rows. A thin brand-red rule at the top is
-          the only colour move; everything else is small text on hairline
-          dividers, which is what keeps a menu with three expandable
-          sections from feeling heavier than it is. Still opacity/transform
-          only (no clip-path, no animated blur), so it stays flicker-free. */}
+      {/* Mobile: a bottom sheet, not a side drawer — a different silhouette,
+          a different opening direction, and a different content pattern
+          (segmented tabs instead of stacked accordions) from every earlier
+          pass at this menu. Still light, still small type, still opacity /
+          transform only so it stays flicker-free. */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div className="fixed inset-0 z-50 lg:hidden">
-            {/* A backdrop this translucent let the page's own animated glow
-                blobs and gradients keep moving underneath it, tinted but
-                still visibly shifting — that's what read as flicker,
-                especially mid-transition. Opaque enough hides that
-                entirely; matching duration/ease with the panel means the
-                two layers settle on the same frame instead of visibly
-                trailing each other. */}
             <motion.div
               aria-hidden
               onClick={() => setMobileOpen(false)}
@@ -334,17 +336,31 @@ export default function SplashNav() {
             />
 
             <motion.div
-              className="absolute right-0 top-0 flex h-full w-[78%] max-w-xs flex-col bg-surface shadow-[-20px_0_50px_-24px_rgba(35,31,32,0.45)]"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%', transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
-              transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
+              className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col overflow-hidden rounded-t-[26px] bg-surface shadow-[0_-24px_60px_-24px_rgba(35,31,32,0.45)]"
+              initial={{ y: '100%' }}
+              animate={{ y: 0, transition: { type: 'spring', stiffness: 380, damping: 34, mass: 0.9 } }}
+              exit={{ y: '100%', transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
             >
-              <div className="h-[3px] shrink-0 bg-gradient-to-r from-brand-600 to-brand-400" />
+              <div className="flex shrink-0 justify-center pb-1 pt-2.5">
+                <span className="h-1 w-9 rounded-full bg-slate-900/15" />
+              </div>
 
-              <div className="flex h-13 shrink-0 items-center justify-between border-b border-line px-4">
-                <img src="/brand/wordmark.png" alt="Book My Carer" className="h-7 w-auto" />
+              <div className="flex shrink-0 items-center justify-between px-5 pb-3">
+                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                  {t('sidebar.menu')}
+                </span>
+                {/* Home moved here as a plain icon button — it doesn't need a
+                    whole tab of its own, and sitting beside the language
+                    control keeps the segmented row below to just the two
+                    sections that actually have content to browse. */}
                 <div className="flex items-center gap-1.5">
+                  <Link
+                    to="/"
+                    aria-label={t('nav.home')}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-slate-900/[0.025] text-slate-500 transition-all duration-150 hover:border-brand-600/30 hover:text-brand-700 active:scale-95"
+                  >
+                    <HomeIcon size={14} />
+                  </Link>
                   <LanguageSwitcher iconOnly />
                   <button
                     onClick={() => setMobileOpen(false)}
@@ -356,111 +372,119 @@ export default function SplashNav() {
                 </div>
               </div>
 
-              <motion.nav
-                variants={stagger(0.04, 0.06)}
-                initial="hidden"
-                animate="show"
-                className="flex-1 overflow-y-auto px-4"
-              >
-                <motion.div variants={fadeUp} className="border-b border-line">
-                  <Link to="/" className="group flex items-center justify-between py-3">
-                    <span className="text-sm font-semibold text-slate-800">{t('nav.home')}</span>
-                    <ChevronRight
-                      size={14}
-                      className="shrink-0 text-slate-300 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-brand-600"
-                    />
-                  </Link>
-                </motion.div>
-
-                <motion.div variants={fadeUp} className="border-b border-line">
-                  <button
-                    onClick={() => setMobileSection(mobileSection === 'services' ? null : 'services')}
-                    className="flex w-full cursor-pointer items-center justify-between py-3 text-left"
-                  >
-                    <span className="text-sm font-semibold text-slate-800">
-                      {t('nav.careTypeServices')}
-                    </span>
-                    <ChevronDown
-                      size={14}
+              <div className="shrink-0 px-5 pb-3">
+                <div className="relative flex gap-1 rounded-full bg-slate-900/[0.045] p-1">
+                  {[
+                    { key: 'services', label: t('nav.careTypeServices'), Icon: LayoutGrid },
+                    { key: 'location', label: t('nav.location'), Icon: MapPin },
+                  ].map(({ key, label, Icon }) => (
+                    <motion.button
+                      key={key}
+                      onClick={() => selectMobileTab(key)}
+                      whileTap={{ scale: 0.96 }}
                       className={cn(
-                        'shrink-0 text-slate-400 transition-transform duration-300',
-                        mobileSection === 'services' && 'rotate-180'
+                        'relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-full py-2.5 text-[12.5px] font-semibold transition-colors duration-300',
+                        mobileTab === key ? 'text-white' : 'text-slate-500'
                       )}
-                    />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {mobileSection === 'services' && (
+                    >
+                      {mobileTab === key && (
+                        <motion.span
+                          layoutId="mobile-tab-pill"
+                          className="absolute inset-0 -z-10 rounded-full bg-ink"
+                          transition={{ type: 'spring', stiffness: 500, damping: 34 }}
+                        />
+                      )}
+                      <Icon size={13} />
+                      <span className="truncate">{label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 pb-4">
+                <AnimatePresence mode="wait" initial={false} custom={tabDirection}>
+                  {mobileTab === 'services' && (
+                    <motion.div
+                      key="services"
+                      custom={tabDirection}
+                      initial={(dir) => ({ opacity: 0, x: dir * 16 })}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={(dir) => ({ opacity: 0, x: -dir * 16, transition: { duration: 0.16, ease: EASE_OUT_EXPO } })}
+                      transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
+                    >
                       <motion.div
-                        variants={collapse}
+                        variants={stagger(0.035)}
                         initial="hidden"
                         animate="show"
-                        exit="exit"
-                        className="overflow-hidden"
+                        className="flex gap-2.5 overflow-x-auto pb-1"
                       >
-                        <div className="grid grid-cols-2 gap-1.5 pb-3">
-                          {categories.map((cat) => (
-                            <Link
-                              key={cat.id}
-                              to={`/services/${cat.slug}`}
-                              className="flex items-center gap-1.5 rounded-lg border border-line bg-slate-900/[0.02] px-2 py-2 text-[11px] font-medium leading-snug text-slate-600 transition-colors hover:border-brand-600/30 hover:bg-brand-600/[0.04] hover:text-slate-900"
-                            >
-                              <span className="shrink-0 text-xs">{getCategoryEmoji(cat.icon)}</span>
-                              <span className="line-clamp-2">{cat.name}</span>
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-
-                <motion.div variants={fadeUp} className="border-b border-line">
-                  <button
-                    onClick={() => setMobileSection(mobileSection === 'location' ? null : 'location')}
-                    className="flex w-full cursor-pointer items-center justify-between py-3 text-left"
-                  >
-                    <span className="text-sm font-semibold text-slate-800">{t('nav.location')}</span>
-                    <ChevronDown
-                      size={14}
-                      className={cn(
-                        'shrink-0 text-slate-400 transition-transform duration-300',
-                        mobileSection === 'location' && 'rotate-180'
-                      )}
-                    />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {mobileSection === 'location' && (
-                      <motion.div
-                        variants={collapse}
-                        initial="hidden"
-                        animate="show"
-                        exit="exit"
-                        className="overflow-hidden"
-                      >
-                        <div className="flex flex-wrap gap-1.5 pb-3">
-                          {LOCATIONS.map((loc) => (
-                            <span
-                              key={loc}
-                              className="inline-flex items-center gap-1 rounded-full border border-line bg-slate-900/[0.02] px-2.5 py-1 text-[10.5px] font-medium text-slate-600"
-                            >
-                              <MapPin size={10} className="text-slate-400" />
-                              {loc}
+                        {categories.map((cat) => {
+                          const Icon = getCategoryIcon(cat.icon)
+                          return (
+                            <motion.div key={cat.id} variants={fadeUp} className="shrink-0">
+                              <Link to={`/services/${cat.slug}`} className="group block w-[100px]">
+                                <span className="relative block h-20 overflow-hidden rounded-2xl">
+                                  <img
+                                    src={getCategoryPhotoUrl(cat.icon, { w: 220, q: 60 })}
+                                    alt=""
+                                    loading="lazy"
+                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  />
+                                  <span className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
+                                  <span className="absolute bottom-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-md bg-white/90 text-ink">
+                                    <Icon size={11} />
+                                  </span>
+                                </span>
+                                <span className="mt-1.5 block line-clamp-2 text-[11px] font-medium leading-snug text-slate-700">
+                                  {cat.name}
+                                </span>
+                              </Link>
+                            </motion.div>
+                          )
+                        })}
+                        <motion.div variants={fadeUp} className="shrink-0">
+                          <Link
+                            to="/services"
+                            className="flex h-20 w-[100px] flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line text-center transition-colors hover:border-brand-600/40"
+                          >
+                            <Sparkles size={15} className="text-brand-500" />
+                            <span className="text-[10.5px] font-semibold text-slate-600">
+                              {t('browse.viewAll')}
                             </span>
-                          ))}
-                        </div>
+                          </Link>
+                        </motion.div>
                       </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
+                    </motion.div>
+                  )}
 
-              </motion.nav>
+                  {mobileTab === 'location' && (
+                    <motion.div
+                      key="location"
+                      custom={tabDirection}
+                      initial={(dir) => ({ opacity: 0, x: dir * 16 })}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={(dir) => ({ opacity: 0, x: -dir * 16, transition: { duration: 0.16, ease: EASE_OUT_EXPO } })}
+                      transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
+                      className="grid grid-cols-2 gap-2"
+                    >
+                      {LOCATIONS.map((loc, i) => (
+                        <motion.button
+                          key={loc}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0, transition: { delay: 0.03 * i, duration: 0.3, ease: EASE_OUT_EXPO } }}
+                          whileTap={{ scale: 0.96 }}
+                          className="flex items-center gap-2 rounded-xl border border-line bg-slate-900/[0.02] px-3 py-2.5 text-left text-[12px] font-medium text-slate-600 transition-colors hover:border-brand-600/30 hover:text-slate-900"
+                        >
+                          <MapPin size={12} className="shrink-0 text-brand-500" />
+                          <span className="truncate">{loc}</span>
+                        </motion.button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
-              <motion.div
-                variants={fadeUp}
-                initial="hidden"
-                animate="show"
-                className="shrink-0 space-y-2 border-t border-line px-4 py-3"
-              >
+              <div className="shrink-0 border-t border-line px-5 py-3">
                 {session ? (
                   <Link to={ROLE_HOME[session.role]}>
                     <Button className="w-full" size="sm" variant="secondary">
@@ -468,36 +492,41 @@ export default function SplashNav() {
                     </Button>
                   </Link>
                 ) : (
-                  <>
-                    <Link to="/login/user">
-                      <Button className="w-full" size="sm" variant="primary">
+                  // A tri-tile bar rather than a stacked button + pair: the
+                  // primary action keeps the only fill colour so it still
+                  // reads as the default choice, while the other two sit as
+                  // plain icon-over-label tiles beside it.
+                  <div className="grid grid-cols-3 overflow-hidden rounded-2xl border border-line">
+                    <Link
+                      to="/login/user"
+                      className="flex flex-col items-center gap-1 bg-brand-600 px-1 py-2.5 text-white transition-all duration-150 hover:bg-brand-700 active:scale-95"
+                    >
+                      <ArrowUpRight size={15} />
+                      <span className="text-center text-[9.5px] font-bold uppercase leading-tight tracking-wide">
                         {t('nav.loginBookNow')}
-                        <ArrowUpRight size={13} />
-                      </Button>
+                      </span>
                     </Link>
-                    {/* Two tints, not two identical outlines — a login and a
-                        signup read as different weights of action even when
-                        they're the same size, and that's what kept the pair
-                        from looking like one button rendered twice. */}
-                    <div className="grid grid-cols-2 gap-2">
-                      <Link
-                        to="/login/staff"
-                        className="flex items-center justify-center gap-1.5 rounded-xl border border-brand-600/20 bg-brand-600/[0.06] py-2.5 text-[12.5px] font-semibold text-brand-700 transition-colors hover:bg-brand-600/[0.11]"
-                      >
-                        <LogIn size={13} />
+                    <Link
+                      to="/login/staff"
+                      className="flex flex-col items-center gap-1 border-l border-line bg-slate-900/[0.02] px-1 py-2.5 text-slate-600 transition-all duration-150 hover:bg-slate-900/[0.05] hover:text-slate-900 active:scale-95"
+                    >
+                      <LogIn size={15} />
+                      <span className="text-center text-[9.5px] font-bold uppercase leading-tight tracking-wide">
                         {t('nav.caregiverLogin')}
-                      </Link>
-                      <Link
-                        to="/become-a-caregiver"
-                        className="flex items-center justify-center gap-1.5 rounded-xl border border-line bg-slate-900/[0.03] py-2.5 text-[12.5px] font-semibold text-slate-600 transition-colors hover:bg-slate-900/[0.06] hover:text-slate-900"
-                      >
-                        <UserPlus size={13} />
+                      </span>
+                    </Link>
+                    <Link
+                      to="/become-a-caregiver"
+                      className="flex flex-col items-center gap-1 border-l border-line bg-slate-900/[0.02] px-1 py-2.5 text-slate-600 transition-all duration-150 hover:bg-slate-900/[0.05] hover:text-slate-900 active:scale-95"
+                    >
+                      <UserPlus size={15} />
+                      <span className="text-center text-[9.5px] font-bold uppercase leading-tight tracking-wide">
                         {t('nav.becomeACaregiver')}
-                      </Link>
-                    </div>
-                  </>
+                      </span>
+                    </Link>
+                  </div>
                 )}
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         )}

@@ -16,7 +16,7 @@ export default function ServicesListPage() {
       />
 
       <div className="relative max-w-2xl">
-        <Reveal variant="fade">
+        <Reveal variant="fade" animateOnMount>
           <span className="eyebrow flex items-center gap-3 text-brand-700">
             <span className="h-px w-10 bg-gradient-to-r from-brand-600 to-transparent" />
             {t('home.categoriesEyebrow')}
@@ -25,10 +25,11 @@ export default function ServicesListPage() {
         <TextReveal
           text={t('servicesListPage.title')}
           as="h1"
+          animateOnMount
           className="mt-5 text-4xl font-semibold leading-[1.02] tracking-tight text-slate-900 sm:text-6xl"
           highlight={[1, 2]}
         />
-        <Reveal delay={0.15}>
+        <Reveal delay={0.15} animateOnMount>
           <p className="mt-5 text-base leading-relaxed text-slate-500">
             {t('servicesListPage.subtitle')}
           </p>
@@ -37,7 +38,7 @@ export default function ServicesListPage() {
 
       <div className="rule-fade my-12" />
 
-      <RevealGroup gap={0.06} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <RevealGroup gap={0.06} animateOnMount className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((cat) => (
           <RevealItem key={cat.id}>
             <CategoryCard category={cat} showServices />

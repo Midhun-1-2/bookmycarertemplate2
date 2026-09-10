@@ -53,7 +53,7 @@ export default function CategoryPage() {
       </div>
 
       <section className="relative mx-auto max-w-7xl px-5 pt-10 sm:px-8 sm:pt-14">
-        <Reveal variant="fade">
+        <Reveal variant="fade" animateOnMount>
           <Link
             to="/services"
             className="group inline-flex items-center gap-2 text-[13px] font-semibold text-slate-500 transition-colors hover:text-brand-700"
@@ -66,7 +66,7 @@ export default function CategoryPage() {
           </Link>
         </Reveal>
 
-        <Reveal variant="fade" delay={0.05}>
+        <Reveal variant="fade" delay={0.05} animateOnMount>
           <span className="eyebrow mt-6 inline-block text-brand-700">
             {String(category.services.length).padStart(2, '0')} {t('nav.servicesCount')}
           </span>
@@ -86,7 +86,7 @@ export default function CategoryPage() {
           />
         </div>
 
-        <Reveal delay={0.25}>
+        <Reveal delay={0.25} animateOnMount>
           <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-500 sm:text-base">
             {category.description}
           </p>
@@ -94,7 +94,7 @@ export default function CategoryPage() {
       </section>
 
       <section className="relative mx-auto max-w-7xl px-5 pb-20 pt-10 sm:px-8">
-        <RevealGroup gap={0.06} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup gap={0.06} animateOnMount className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {category.services.map((service, i) => {
             const price = service.priceFrom ?? getServiceStartingPrice(service.id)
             const accent = CARD_ACCENTS[i % CARD_ACCENTS.length]

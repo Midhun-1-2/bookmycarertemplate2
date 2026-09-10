@@ -19,10 +19,17 @@ export default function Reveal({
   as = 'div',
   className,
   viewport = VIEWPORT,
+  // Scroll-triggered `whileInView` can get stuck permanently hidden when this
+  // component mounts via a client-side route change (the IntersectionObserver
+  // set up during the router's AnimatePresence transition never reports an
+  // intersection). `animateOnMount` swaps to a plain mount-triggered `animate`,
+  // same escape hatch `TextReveal` already uses for this reason.
+  animateOnMount = false,
   ...props
 }) {
   const Comp = motion[as] ?? motion.div
   const preset = PRESETS[variant] ?? fadeUp
+  const trigger = animateOnMount ? { animate: 'show' } : { whileInView: 'show', viewport }
 
   return (
     <Comp
@@ -30,9 +37,8 @@ export default function Reveal({
       variants={preset}
       custom={custom}
       initial="hidden"
-      whileInView="show"
-      viewport={viewport}
       transition={{ delay, ...(duration ? { duration } : null) }}
+      {...trigger}
       {...props}
     >
       {children}
@@ -52,18 +58,13 @@ export function RevealGroup({
   as = 'div',
   className,
   viewport = VIEWPORT,
+  animateOnMount = false,
   ...props
 }) {
   const Comp = motion[as] ?? motion.div
+  const trigger = animateOnMount ? { animate: 'show' } : { whileInView: 'show', viewport }
   return (
-    <Comp
-      className={className}
-      variants={stagger(gap, delay)}
-      initial="hidden"
-      whileInView="show"
-      viewport={viewport}
-      {...props}
-    >
+    <Comp className={className} variants={stagger(gap, delay)} initial="hidden" {...trigger} {...props}>
       {children}
     </Comp>
   )

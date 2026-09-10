@@ -335,11 +335,17 @@ export default function SplashNav() {
               transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
             />
 
+            {/* Enter/exit share the backdrop's exact duration and ease — a
+                spring here settles on its own clock, arriving before (or
+                after) the backdrop finishes fading and reading as a stutter.
+                Matching curves is what makes both layers land on the same
+                frame instead of visibly trailing each other. */}
             <motion.div
               className="absolute inset-x-0 bottom-0 flex max-h-[85vh] flex-col overflow-hidden rounded-t-[26px] bg-surface shadow-[0_-24px_60px_-24px_rgba(35,31,32,0.45)]"
               initial={{ y: '100%' }}
-              animate={{ y: 0, transition: { type: 'spring', stiffness: 380, damping: 34, mass: 0.9 } }}
+              animate={{ y: 0 }}
               exit={{ y: '100%', transition: { duration: 0.3, ease: EASE_OUT_EXPO } }}
+              transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
             >
               <div className="flex shrink-0 justify-center pb-1 pt-2.5">
                 <span className="h-1 w-9 rounded-full bg-slate-900/15" />
@@ -412,48 +418,46 @@ export default function SplashNav() {
                       exit={(dir) => ({ opacity: 0, x: -dir * 16, transition: { duration: 0.16, ease: EASE_OUT_EXPO } })}
                       transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
                     >
-                      <motion.div
-                        variants={stagger(0.035)}
-                        initial="hidden"
-                        animate="show"
-                        className="flex gap-2.5 overflow-x-auto pb-1"
-                      >
+                      {/* Plain, not a second stagger of its own — the tab
+                          panel above already carries one slide/fade for the
+                          whole group. Animating every card individually on
+                          top of that (opacity + transform × 9 elements, all
+                          inside a shadowed, rounded, overflow-hidden sheet)
+                          was the real cost behind the flicker: too much
+                          compositor work landing in the same frame. */}
+                      <div className="flex gap-2.5 overflow-x-auto pb-1">
                         {categories.map((cat) => {
                           const Icon = getCategoryIcon(cat.icon)
                           return (
-                            <motion.div key={cat.id} variants={fadeUp} className="shrink-0">
-                              <Link to={`/services/${cat.slug}`} className="group block w-[100px]">
-                                <span className="relative block h-20 overflow-hidden rounded-2xl">
-                                  <img
-                                    src={getCategoryPhotoUrl(cat.icon, { w: 220, q: 60 })}
-                                    alt=""
-                                    loading="lazy"
-                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                  />
-                                  <span className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
-                                  <span className="absolute bottom-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-md bg-white/90 text-ink">
-                                    <Icon size={11} />
-                                  </span>
+                            <Link key={cat.id} to={`/services/${cat.slug}`} className="group block w-[100px] shrink-0">
+                              <span className="relative block h-20 overflow-hidden rounded-2xl">
+                                <img
+                                  src={getCategoryPhotoUrl(cat.icon, { w: 220, q: 60 })}
+                                  alt=""
+                                  loading="lazy"
+                                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                />
+                                <span className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
+                                <span className="absolute bottom-1.5 left-1.5 flex h-5 w-5 items-center justify-center rounded-md bg-white/90 text-ink">
+                                  <Icon size={11} />
                                 </span>
-                                <span className="mt-1.5 block line-clamp-2 text-[11px] font-medium leading-snug text-slate-700">
-                                  {cat.name}
-                                </span>
-                              </Link>
-                            </motion.div>
+                              </span>
+                              <span className="mt-1.5 block line-clamp-2 text-[11px] font-medium leading-snug text-slate-700">
+                                {cat.name}
+                              </span>
+                            </Link>
                           )
                         })}
-                        <motion.div variants={fadeUp} className="shrink-0">
-                          <Link
-                            to="/services"
-                            className="flex h-20 w-[100px] flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line text-center transition-colors hover:border-brand-600/40"
-                          >
-                            <Sparkles size={15} className="text-brand-500" />
-                            <span className="text-[10.5px] font-semibold text-slate-600">
-                              {t('browse.viewAll')}
-                            </span>
-                          </Link>
-                        </motion.div>
-                      </motion.div>
+                        <Link
+                          to="/services"
+                          className="flex h-20 w-[100px] shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border border-dashed border-line text-center transition-colors hover:border-brand-600/40"
+                        >
+                          <Sparkles size={15} className="text-brand-500" />
+                          <span className="text-[10.5px] font-semibold text-slate-600">
+                            {t('browse.viewAll')}
+                          </span>
+                        </Link>
+                      </div>
                     </motion.div>
                   )}
 
@@ -467,17 +471,14 @@ export default function SplashNav() {
                       transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
                       className="grid grid-cols-2 gap-2"
                     >
-                      {LOCATIONS.map((loc, i) => (
-                        <motion.button
+                      {LOCATIONS.map((loc) => (
+                        <button
                           key={loc}
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0, transition: { delay: 0.03 * i, duration: 0.3, ease: EASE_OUT_EXPO } }}
-                          whileTap={{ scale: 0.96 }}
-                          className="flex items-center gap-2 rounded-xl border border-line bg-slate-900/[0.02] px-3 py-2.5 text-left text-[12px] font-medium text-slate-600 transition-colors hover:border-brand-600/30 hover:text-slate-900"
+                          className="flex items-center gap-2 rounded-xl border border-line bg-slate-900/[0.02] px-3 py-2.5 text-left text-[12px] font-medium text-slate-600 transition-all duration-150 active:scale-[0.97] hover:border-brand-600/30 hover:text-slate-900"
                         >
                           <MapPin size={12} className="shrink-0 text-brand-500" />
                           <span className="truncate">{loc}</span>
-                        </motion.button>
+                        </button>
                       ))}
                     </motion.div>
                   )}
